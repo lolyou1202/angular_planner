@@ -1,10 +1,13 @@
 import { Component, input, output } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { IconComponent, IconNames } from '../icon/icon.component'
-import { BorderGroupComponent } from '../border-groupe/border-group.component'
+import { BorderGroupComponent } from '../border-group/border-group.component'
 import { BorderGroupChildComponent } from '../border-group-child/border-group-child.component'
 
-export type Variant = 'white-bordered' | 'primary' | 'transparent'
+export type Variant =
+    | 'white-bordered'
+    | 'primary'
+    | 'transparent'
 export type IconPosition = 'left' | 'right'
 export type PositionInGroupe = 'first' | 'middle' | 'last'
 export type Size = 'sm' | 'md' | 'lg'

@@ -7,7 +7,7 @@ import {
     input,
     output
 } from '@angular/core'
-import { BorderGroupComponent } from '../border-groupe/border-group.component'
+import { BorderGroupComponent } from '../border-group/border-group.component'
 import { BorderGroupChildComponent } from '../border-group-child/border-group-child.component'
 import { ChipComponent } from '../chip/chip.component'
 import { ModalService } from '../../../core/services/modal.service'

@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { BorderGroupComponent } from '../border-groupe/border-group.component'
+import { BorderGroupComponent } from '../border-group/border-group.component'
 import { BorderGroupChildComponent } from '../border-group-child/border-group-child.component'
 
 @Component({
