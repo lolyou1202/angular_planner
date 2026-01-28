@@ -1,6 +1,5 @@
 import { Component, HostBinding, input } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { cn } from '../../../utils/cn'
 
 export type IconNames =
     | 'flag'
@@ -29,7 +28,7 @@ export class IconComponent {
 
     @HostBinding('class')
     get hostClass() {
-        return cn('app-icon')
+        return 'app-icon'
     }
     @HostBinding('style.color')
     get hostStyleColor() {
