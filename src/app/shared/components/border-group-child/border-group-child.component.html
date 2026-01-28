@@ -1,0 +1,21 @@
+<div
+    class="border-group-child bordered-element"
+    [ngClass]="[position() || '']"
+    [class.disable-hover-mode]="disableHoverMode()"
+    [class.bordered-element-hover]="isHover()"
+    [class.only-icon]="!text()"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
+>
+    @if (icon()) {
+    <app-icon
+        [name]="icon()!"
+        class="border-group-child__icon"
+    ></app-icon>
+    } @if (text()) {
+    <p class="border-group-child__text">
+        {{ text() }}
+    </p>
+    }
+    <ng-content></ng-content>
+</div>

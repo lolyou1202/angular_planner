@@ -1,0 +1,55 @@
+:host {
+    --height: 32px;
+    --width: auto;
+    --gap: 8px;
+    --background-color: var(--color-white);
+    --border-radius: 6px;
+    --color-label: var(--color-dark);
+}
+
+.border-group-child {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap);
+
+    padding: 0 8px;
+
+    background: var(--background-color);
+
+    cursor: pointer;
+
+    &.first,
+    &.first::after {
+        border-radius: var(--border-radius) 0 0
+            var(--border-radius);
+    }
+    &.middle,
+    &.middle::after {
+        border-radius: 0;
+    }
+    &.last,
+    &.last::after {
+        border-radius: 0 var(--border-radius)
+            var(--border-radius) 0;
+    }
+
+    &.middle,
+    &.last {
+        margin-left: var(--shadow-width);
+    }
+
+    &.single,
+    &.single::after {
+        border-radius: var(--border-radius);
+    }
+
+    &__icon {
+        --icon-size: 16px;
+    }
+    &__text {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-label);
+    }
+}
