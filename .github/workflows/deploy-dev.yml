@@ -7,23 +7,34 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Критически важно!
     
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout dev branch
+      uses: actions/checkout@v4
       with:
         ref: dev
-    
-    - uses: actions/setup-node@v4
+        token: ${{ secrets.GITHUB_TOKEN }}  # Добавьте это!
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
-    
-    - run: npm ci
-    
-    - run: npm run build --prod --base-href="/angular_planner/"
-    
-    - name: Deploy
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build Angular
+      run: |
+        npm run build --prod --base-href="/angular_planner/"
+        
+    - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}  # ИЛИ используйте этот вариант
+        # github_token: ${{ secrets.GITHUB_TOKEN }}  # Пока закомментируйте
         publish_dir: ./dist/my-app
         publish_branch: gh-pages
+        keep_files: false
+        force_orphan: true
