@@ -19,7 +19,7 @@ import { FilterService } from '../../../../shared/components/filter/filter.servi
     ]
 })
 export class TaskBoardComponent {
-    private _filterService = inject(FilterService<Task>)
+    //private _filterService = inject(FilterService<Task>)
 
     protected readonly FilterModalComponent =
         FilterModalComponent

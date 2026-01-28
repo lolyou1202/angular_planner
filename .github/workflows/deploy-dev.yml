@@ -1,0 +1,63 @@
+name: Deploy dev branch to GitHub Pages
+
+on:
+    push:
+        branches: [dev] # Срабатывает на пуши в ветку dev
+    workflow_dispatch: # Можно запустить вручную
+
+# Разрешения для записи в gh-pages
+permissions:
+    contents: write
+    pages: write
+    id-token: write
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+
+        steps:
+            # 1. Клонируем репозиторий
+            - name: Checkout dev branch
+              uses: actions/checkout@v4
+              with:
+                  ref: dev # Указываем конкретно ветку dev
+
+            # 2. Настраиваем Node.js
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            # 3. Устанавливаем зависимости
+            - name: Install dependencies
+              run: npm ci
+
+            # 4. Собираем Angular проект
+            - name: Build Angular Planner
+              run: |
+                  npm run build -- \
+                    --configuration production \
+                    --base-href="/angular_planner/"
+
+            # 5. Создаем .nojekyll файл (важно для GitHub Pages)
+            - name: Create .nojekyll file
+              run: touch dist/angular-planner/browser/.nojekyll
+
+            # 6. Настраиваем Pages
+            - name: Setup Pages
+              uses: actions/configure-pages@v3
+
+            # 7. Загружаем артефакт
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: 'dist/angular-planner/browser' # Проверьте правильный путь!
+
+            # 8. Деплоим
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v2
