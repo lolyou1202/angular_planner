@@ -27,11 +27,30 @@ jobs:
         npm ci
         npm run build --prod --base-href="/angular_planner/"
         
+    - name: Prepare for deployment
+      run: |
+        # Проверяем структуру
+        echo "=== Build structure ==="
+        ls -la dist/my-app/
+        echo "=== Browser folder ==="
+        ls -la dist/my-app/browser/
+        
+        # Создаем .nojekyll в browser папке
+        touch dist/my-app/browser/.nojekyll
+        
+        # Проверяем что index.html существует
+        if [ -f "dist/my-app/browser/index.html" ]; then
+          echo "✅ index.html found in browser folder"
+        else
+          echo "❌ index.html NOT found!"
+          exit 1
+        fi
+        
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist/my-app/browser
+        publish_dir: ./dist/my-app/browser  # Правильный путь!
         publish_branch: gh-pages
         keep_files: false
         force_orphan: true
