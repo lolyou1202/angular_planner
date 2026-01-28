@@ -1,0 +1,30 @@
+<div class="filter">
+    <app-border-group hoverMode="individual-hover">
+        <app-border-group-child
+            text="Фильтры"
+            (click)="onOpenFilterModal()"
+            class="filter__btn-open-modal"
+        >
+            @if (showFilterCount() && hasActiveFilters()) {
+            <p class="filter__count">({{ activeCount() }})</p>
+            }
+        </app-border-group-child>
+        @if (hasActiveFilters()) {
+        <app-border-group-child
+            icon="cross"
+            (click)="onClearAllFilters()"
+        />
+        }
+    </app-border-group>
+
+    @if (hasActiveFilters()) {
+    <div class="filter__chips-container">
+        @for (chip of chips(); track chip.type) {
+        <app-chip
+            [label]="chip.label"
+            (removed)="onRemoveChip(chip)"
+        />
+        }
+    </div>
+    }
+</div>

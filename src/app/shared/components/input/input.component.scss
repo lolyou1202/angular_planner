@@ -1,0 +1,111 @@
+.input {
+    &__container {
+        position: relative;
+
+        display: flex;
+
+        background: var(--color-white);
+        border: var(--border-style);
+        border-color: var(--border-color);
+        border-radius: 6px;
+
+        overflow: hidden;
+        width: 100%;
+        max-width: 400px;
+        height: 32px;
+
+        transition: border-color 0.2s ease;
+
+        &:hover,
+        &:has(.app-input__input:focus) {
+            border-color: var(--border-color-hover);
+
+            .app-input__leftbutton {
+                border-color: var(--border-color-hover);
+            }
+        }
+    }
+
+    &__leftbutton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 8px;
+
+        background: var(--background);
+        border: none;
+        border-right: var(--border-style);
+        border-color: var(--border-color);
+
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease;
+
+        &:hover {
+            .app-input__leftbutton-icon {
+                color: var(--color-dark);
+            }
+        }
+
+        &-icon {
+            color: var(--color-light);
+
+            transition: color 0.2s ease;
+        }
+    }
+
+    &__input {
+        padding: 0 28px 0 8px;
+
+        width: 100%;
+
+        outline: none;
+        background: none;
+        border: none;
+
+        font-family: 'Lato', serif;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-dark);
+
+        &::placeholder {
+            font-family: 'Lato', serif;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16px;
+            color: var(--color-light);
+        }
+    }
+
+    &__crossbutton {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: none;
+        border: none;
+
+        color: var(--color-light);
+
+        cursor: pointer;
+        transition: color 0.2s ease, opacity 0.2s ease;
+
+        &:hover {
+            color: var(--color-dark);
+        }
+
+        &.--hide {
+            opacity: 0;
+        }
+
+        &-icon {
+            --icon-size: 12px;
+        }
+    }
+}

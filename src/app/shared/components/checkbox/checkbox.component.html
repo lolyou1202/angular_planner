@@ -1,0 +1,10 @@
+<span
+    class="checkbox__box"
+    [class.checked]="checked()"
+    [class.disabled]="disabled()"
+    (click)="onToggle()"
+>
+    @if (checked()) {
+    <app-icon name="check" class="checkbox__icon"></app-icon>
+    }
+</span>

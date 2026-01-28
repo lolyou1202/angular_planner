@@ -1,0 +1,76 @@
+.task-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    padding: 16px;
+
+	max-width: 352px;
+
+    background: var(--background);
+    border: 1px solid;
+    border-color: var(--border-color);
+    border-radius: 12px;
+
+    user-select: none;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__label-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        & > div {
+            display: flex;
+            gap: 12px;
+        }
+    }
+
+    &__color {
+        display: flex;
+        width: 4px;
+
+        background: var(--color-dark);
+    }
+
+    &__name {
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 32px;
+        color: var(--color-dark);
+    }
+
+    &__count {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 24px;
+        height: 24px;
+
+        background: var(--color-white);
+        border: 1px solid;
+        border-color: var(--border-color);
+        border-radius: 4px;
+
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: var(--color-dark);
+    }
+
+    &__buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+}

@@ -1,0 +1,35 @@
+.progress-ring {
+    position: relative;
+
+    svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+    }
+
+    &__background {
+        fill: none;
+        stroke: var(--border-color);
+        stroke-linecap: round;
+    }
+
+    &__progress {
+        fill: none;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.2s ease, stroke 0.2s ease;
+        stroke-dasharray: 251.2; // 2 * π * 40 = ~251.2
+
+        &.--high {
+            stroke: var(--circle-indicator-high);
+        }
+        &.--medium {
+            stroke: var(--circle-indicator-medium);
+        }
+        &.--low {
+            stroke: var(--circle-indicator-low);
+        }
+        &.--completed {
+            stroke: var(--circle-indicator-completed);
+        }
+    }
+}

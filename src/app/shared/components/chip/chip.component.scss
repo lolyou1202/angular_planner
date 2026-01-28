@@ -1,0 +1,8 @@
+.chip {
+    &__label {
+        --background-color: var(--background);
+        --color-label: var(--color-light);
+    }
+    &__icon {
+    }
+}

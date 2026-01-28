@@ -1,0 +1,64 @@
+<div
+    class="task-card"
+    [class.completed]="task().completed"
+    (click)="onClickTask()"
+>
+    <div class="task-card__main">
+        <div class="task-card__title-row">
+            <span>
+                <app-checkbox
+                    [(checked)]="task().completed"
+                    [disabled]="false"
+                ></app-checkbox>
+                <h3 class="task-card__title">
+                    {{ task().title }}
+                </h3>
+            </span>
+            <span class="task-card__drag">
+                <app-icon
+                    name="drag"
+                    class="task-card__drag-icon"
+                ></app-icon>
+            </span>
+        </div>
+        @if (task().description; as descriptionValue) {
+        <p class="task-card__description">
+            {{ descriptionValue }}
+        </p>
+        }
+        <div class="task-card__tags">
+            <app-badge
+                [colorScheme]="priorityBadge()"
+                iconName="flag"
+            ></app-badge>
+            @if (durationBadge(); as durationBadgeValue) {
+            <app-badge
+                [colorScheme]="durationBadgeValue.color"
+                iconName="double-chevron-bottom-circle"
+                [text]="durationBadgeValue.text"
+            ></app-badge>
+            }
+        </div>
+    </div>
+    <div class="task-card__footer">
+        @for (metaDataItem of metaDataItems(); track $index) {
+        <div class="task-card__meta">
+            @if (metaDataItem.icon === 'progress-ring') {
+            <app-progress-ring
+                [completed]="task().completedSubtasks!"
+                [total]="task().totalSubtasks!"
+                size="16px"
+            ></app-progress-ring>
+            } @else {
+            <app-icon
+                [name]="metaDataItem.icon"
+                class="task-card__meta-icon"
+            ></app-icon>
+            }
+            <span class="task-card__meta-text">
+                {{ metaDataItem.text }}
+            </span>
+        </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,69 @@
+<form class="filter-modal-form">
+    <div class="filter-modal-form__group-row">
+        <div class="filter-modal-form__group">
+            <p class="filter-modal-form__group-label">
+                Приоритет
+            </p>
+            <div class="filter-modal-form__group-container">
+                <app-badge
+                    iconName="flag"
+                    colorScheme="green"
+                    withToggle
+                ></app-badge>
+                <app-badge
+                    iconName="flag"
+                    colorScheme="yellow"
+                    withToggle
+                ></app-badge>
+                <app-badge
+                    iconName="flag"
+                    colorScheme="red"
+                    withToggle
+                ></app-badge>
+                <app-badge
+                    iconName="flag"
+                    colorScheme="gray"
+                    withToggle
+                ></app-badge>
+            </div>
+        </div>
+        <div class="filter-modal-form__group">
+            <p class="filter-modal-form__group-label">
+                Длительность
+            </p>
+            <div class="filter-modal-form__group-container">
+                <app-badge
+                    iconName="double-chevron-bottom-circle"
+                    text="Долго"
+                    colorScheme="orange"
+                    withToggle
+                ></app-badge>
+                <app-badge
+                    iconName="double-chevron-top-circle"
+                    text="Быстро"
+                    colorScheme="blue"
+                    withToggle
+                ></app-badge>
+            </div>
+        </div>
+    </div>
+    <div class="filter-modal-form__group-row">
+        <div class="filter-modal-form__group">
+            <p class="filter-modal-form__group-label">Статус</p>
+            <div class="filter-modal-form__group-container">
+                <app-badge
+                    iconName="check"
+                    text="Выполнена"
+                    colorScheme="done"
+                    withToggle
+                ></app-badge>
+                <app-badge
+                    iconName="cross"
+                    text="В работе"
+                    colorScheme="gray"
+                    withToggle
+                ></app-badge>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,21 @@
+.filter {
+    display: flex;
+    gap: 8px;
+
+	&__btn-open-modal {
+		--gap: 4px;
+	}
+
+    &__count {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--color-light);
+    }
+
+    &__chips-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}

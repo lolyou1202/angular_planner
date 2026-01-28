@@ -1,0 +1,133 @@
+.task-card {
+    display: flex;
+    flex-direction: column;
+
+    background: var(--token-white);
+    border-radius: 8px;
+    border: 1px solid;
+    border-color: var(--border-color);
+
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.2s ease;
+
+    &.completed {
+        border-color: var(--done);
+
+        .task-card__footer {
+            border-color: var(--done);
+        }
+    }
+
+    &:hover {
+        border-color: var(--border-color-hover);
+
+        .task-card__footer {
+            border-color: var(--border-color-hover);
+        }
+
+        &.completed {
+            border-color: var(--done-dark);
+
+            .task-card__footer {
+                border-color: var(--done-dark);
+            }
+        }
+    }
+
+    &__main {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        padding: 12px 12px 8px 12px;
+    }
+
+    &__title {
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 20px;
+        color: var(--color-dark);
+
+        &-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+
+            & > span {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+        }
+    }
+
+    &__drag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 20px;
+        height: 20px;
+
+        cursor: pointer;
+
+        &:hover {
+            .task-card__drag-icon {
+                color: var(--border-color-hover);
+            }
+        }
+
+        &-icon {
+            color: var(--border-color);
+            transition: color 0.2s ease;
+        }
+    }
+
+    &__description {
+        display: -webkit-box;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--color-light);
+    }
+
+    &__tags {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__footer {
+        display: flex;
+        gap: 8px;
+
+        padding: 8px 12px;
+
+        border-top: 1px solid;
+        border-color: var(--border-color);
+
+        transition: border-color 0.2s ease;
+    }
+
+    &__meta {
+        display: flex;
+        gap: 4px;
+
+        &-icon {
+            color: var(--color-light);
+        }
+
+        &-text {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16px;
+            color: var(--color-light);
+        }
+    }
+}

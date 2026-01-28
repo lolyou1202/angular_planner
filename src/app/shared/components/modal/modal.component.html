@@ -1,0 +1,32 @@
+<div class="modal">
+    @if (config().title) {
+    <div class="modal__header">
+        <h2 class="modal__title">
+            {{ config().title }}
+        </h2>
+        <app-button
+            variant="transparent"
+            icon="cross"
+            class="modal__closebutton"
+            (click)="onClose()"
+        ></app-button>
+    </div>
+    }
+
+    <div class="modal__content">
+        <ng-container #componentContainer></ng-container>
+
+        @if (!childComponent && config().content) {
+        <p>{{ config().content }}</p>
+        } @else if (!childComponent) {
+        <ng-content></ng-content>
+        }
+    </div>
+
+    @if (config().hasActions) {
+    <div class="modal__footer">
+        <app-button variant="white-bordered" text="Сбросить" />
+        <app-button variant="primary" text="Применить" />
+    </div>
+    }
+</div>

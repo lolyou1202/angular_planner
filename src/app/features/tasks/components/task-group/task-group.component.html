@@ -1,0 +1,37 @@
+<div class="task-group">
+    <div class="task-group__header">
+        <div class="task-group__label-row">
+            <div>
+                <span
+                    class="task-group__color"
+                    [style]="{ background: group().color }"
+                ></span>
+                <h2 class="task-group__name">
+                    {{ group().name }}
+                </h2>
+            </div>
+            <p class="task-group__count">
+                {{ group().tasks.length }}
+            </p>
+        </div>
+        <div class="task-group__buttons">
+            <app-button
+                variant="primary"
+                icon="plus"
+            ></app-button>
+            <app-button
+                variant="white-bordered"
+                icon="more"
+                (clicked)="onClickMore()"
+            ></app-button>
+        </div>
+    </div>
+    <div class="task-group__list">
+        @for (task of group().tasks; track task.id) {
+        <app-task-card
+            [task]="task"
+            (taskClicked)="onClickTask({ taskId: task.id })"
+        ></app-task-card>
+        }
+    </div>
+</div>

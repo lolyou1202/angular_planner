@@ -1,0 +1,32 @@
+<div
+    class="input__container"
+    [class.withIconLeft]="leftIconName()"
+>
+    @if (leftIconName(); as IconLeftNameValue) {
+    <button class="input__leftbutton">
+        <app-icon
+            [name]="IconLeftNameValue"
+            class="input__leftbutton-icon"
+        ></app-icon>
+    </button>
+    }
+    <input
+        type="text"
+        name="input"
+        [placeholder]="placeholder() ?? ''"
+        [value]="text()"
+        (input)="onInput($event)"
+        class="input__input"
+    />
+    <button
+        type="button"
+        class="input__crossbutton"
+        [class.--hide]="!text()"
+        (click)="clearInput()"
+    >
+        <app-icon
+            name="cross"
+            class="input__crossbutton-icon"
+        ></app-icon>
+    </button>
+</div>

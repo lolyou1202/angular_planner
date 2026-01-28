@@ -1,0 +1,16 @@
+<div
+    class="badge bordered-element"
+    [class.only-icon]="!text()"
+    [class.toggleable]="withToggle()"
+    [class.active]="isActive()"
+    [ngClass]="[colorScheme()]"
+	(click)="toggle()"
+>
+    @if (iconName()) {
+    <app-icon [name]="iconName()!" class="badge__icon" />
+    } @if (text()) {
+    <span class="badge__text">
+        {{ text() }}
+    </span>
+    }
+</div>

@@ -1,0 +1,14 @@
+<div class="chip">
+    <app-border-group hoverMode="individual-hover">
+        <app-border-group-child
+            disableHoverMode
+            [text]="label()"
+            class="chip__label"
+        ></app-border-group-child>
+        <app-border-group-child
+            icon="cross"
+            class="chip__icon"
+            (onclick)="onRemoveChip()"
+        ></app-border-group-child>
+    </app-border-group>
+</div>
