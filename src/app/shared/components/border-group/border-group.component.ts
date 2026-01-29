@@ -24,18 +24,7 @@ export class BorderGroupComponent implements AfterContentInit {
     hoverMode = input<HoverMode>('individual-hover')
 
     ngAfterContentInit() {
-        const count = this.children.length
-        this.children.forEach((child, index) => {
-            if (count === 1) {
-                child.position.set('single')
-            } else if (index === 0) {
-                child.position.set('first')
-            } else if (index === count - 1) {
-                child.position.set('last')
-            } else {
-                child.position.set('middle')
-            }
-
+        this.children.forEach(child => {
             if (this.hoverMode() === 'individual-hover') {
                 child.mouseEnter.subscribe(() =>
                     child.isHover.set(true)

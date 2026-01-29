@@ -18,28 +18,26 @@
 
     cursor: pointer;
 
-    &.first,
-    &.first::after {
+    &:first-child,
+    &:first-child::after {
         border-radius: var(--border-radius) 0 0
             var(--border-radius);
     }
-    &.middle,
-    &.middle::after {
+    &:not(:first-child, :last-child),
+    &:not(:first-child, :last-child)::after {
         border-radius: 0;
     }
-    &.last,
-    &.last::after {
+    &:last-child,
+    &:last-child::after {
         border-radius: 0 var(--border-radius)
             var(--border-radius) 0;
     }
-
-    &.middle,
-    &.last {
+    &:not(:first-child, :last-child),
+    &:last-child {
         margin-left: var(--shadow-width);
     }
-
-    &.single,
-    &.single::after {
+    &:first-child:last-child,
+    &:first-child:last-child::after {
         border-radius: var(--border-radius);
     }
 

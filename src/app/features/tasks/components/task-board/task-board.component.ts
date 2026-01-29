@@ -5,7 +5,7 @@ import { FilterComponent } from '../../../../shared/components/filter/filter.com
 import { InputComponent } from '../../../../shared/components/input/input.component'
 import { Group, Task } from '../../models/tasks.model'
 import { FilterModalComponent } from '../../../../shared/components/filter/filter-modal/filter-modal.component'
-import { FilterService } from '../../../../shared/components/filter/filter.service'
+import { FilterService } from '../../../../shared/components/filter/services/filter.service'
 
 @Component({
     selector: 'app-task-board',
@@ -19,7 +19,7 @@ import { FilterService } from '../../../../shared/components/filter/filter.servi
     ]
 })
 export class TaskBoardComponent {
-    //private _filterService = inject(FilterService<Task>)
+    private _filterService = inject(FilterService)
 
     protected readonly FilterModalComponent =
         FilterModalComponent
