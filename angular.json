@@ -39,7 +39,8 @@
 						"styles": [
 							"src/styles.scss"
 						],
-						"scripts": []
+						"scripts": [],
+						"baseHref": "/lolyou1202/"
 					},
 					"configurations": {
 						"production": {
@@ -55,7 +56,8 @@
 									"maximumError": "8kB"
 								}
 							],
-							"outputHashing": "all"
+							"outputHashing": "all",
+							"baseHref": "/lolyou1202/"
 						},
 						"development": {
 							"optimization": false,
