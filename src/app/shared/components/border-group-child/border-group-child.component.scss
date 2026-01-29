@@ -1,7 +1,7 @@
 :host {
     --height: 32px;
     --width: auto;
-    --gap: 8px;
+    --gap: 4px;
     --background-color: var(--color-white);
     --border-radius: 6px;
     --color-label: var(--color-dark);
@@ -15,6 +15,7 @@
     padding: 0 8px;
 
     background: var(--background-color);
+    border: none;
 
     cursor: pointer;
 
@@ -32,12 +33,10 @@
         border-radius: 0 var(--border-radius)
             var(--border-radius) 0;
     }
-
     &.middle,
     &.last {
         margin-left: var(--shadow-width);
     }
-
     &.single,
     &.single::after {
         border-radius: var(--border-radius);
@@ -45,6 +44,8 @@
 
     &__icon {
         --icon-size: 16px;
+
+        color: var(--color-dark);
     }
     &__text {
         font-weight: 400;
