@@ -3,7 +3,7 @@
 	"version": 1,
 	"newProjectRoot": "projects",
 	"projects": {
-		"my-app": {
+		"angular-planner": {
 			"projectType": "application",
 			"schematics": {
 				"@schematics/angular:component": {
@@ -17,7 +17,7 @@
 				"build": {
 					"builder": "@angular-devkit/build-angular:application",
 					"options": {
-						"outputPath": "dist/my-app",
+						"outputPath": "dist/angular-planner/browser",
 						"index": "src/index.html",
 						"browser": "src/main.ts",
 						"polyfills": [
@@ -40,7 +40,7 @@
 							"src/styles.scss"
 						],
 						"scripts": [],
-						"baseHref": "/lolyou1202/"
+						"baseHref": "/angular_planner/"
 					},
 					"configurations": {
 						"production": {
@@ -57,7 +57,7 @@
 								}
 							],
 							"outputHashing": "all",
-							"baseHref": "/lolyou1202/"
+							"baseHref": "/angular_planner/"
 						},
 						"development": {
 							"optimization": false,
@@ -71,10 +71,10 @@
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"configurations": {
 						"production": {
-							"buildTarget": "my-app:build:production"
+							"buildTarget": "angular-planner:build:production"
 						},
 						"development": {
-							"buildTarget": "my-app:build:development"
+							"buildTarget": "angular-planner:build:development"
 						}
 					},
 					"defaultConfiguration": "development"
