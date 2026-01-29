@@ -3,18 +3,14 @@ import {
     ViewChild,
     ViewContainerRef,
     ComponentRef,
-    inject,
     OnDestroy,
     output,
     signal,
     Type,
     AfterViewInit
 } from '@angular/core'
-import {
-    ModalConfig,
-    ModalService
-} from '../../../core/services/modal.service'
 import { CommonModule } from '@angular/common'
+import { ModalAction, ModalConfig } from './models/modal.model'
 import { ButtonComponent } from '../button/button.component'
 
 @Component({
@@ -25,8 +21,6 @@ import { ButtonComponent } from '../button/button.component'
     styleUrl: 'modal.component.scss'
 })
 export class ModalComponent implements AfterViewInit, OnDestroy {
-    private _modalService = inject(ModalService)
-
     @ViewChild('componentContainer', {
         read: ViewContainerRef,
         static: true
@@ -71,7 +65,6 @@ export class ModalComponent implements AfterViewInit, OnDestroy {
                     this.childComponent
                 )
 
-            // Передать данные в дочерний компонент, если они есть
             if (
                 this.config().data &&
                 this._componentRef.instance
@@ -84,9 +77,14 @@ export class ModalComponent implements AfterViewInit, OnDestroy {
         }
     }
 
+    onActionClick(action: ModalAction): void {
+        if (action.onClick) {
+            action.onClick()
+        }
+    }
+
     onClose(): void {
         this.closed.emit()
-        this._modalService.close()
     }
 
     ngOnDestroy(): void {

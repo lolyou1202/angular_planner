@@ -23,10 +23,16 @@
         }
     </div>
 
-    @if (config().hasActions) {
+    @if (config().actions) {
     <div class="modal__footer">
-        <app-button variant="white-bordered" text="Сбросить" />
-        <app-button variant="primary" text="Применить" />
+        @for (action of config().actions; track action.text) {
+        <app-button
+            [variant]="action.variant"
+            [text]="action.text"
+            [disabled]="action.disabled"
+            (click)="onActionClick(action)"
+        ></app-button>
+        }
     </div>
     }
 </div>
