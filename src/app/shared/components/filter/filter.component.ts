@@ -10,9 +10,9 @@ import {
 import { BorderGroupComponent } from '../border-group/border-group.component'
 import { BorderGroupChildComponent } from '../border-group-child/border-group-child.component'
 import { ChipComponent } from '../chip/chip.component'
-import { ModalService } from '../../../core/services/modal.service'
-import { FilterChip } from './filter.model'
-import { FilterService } from './filter.service'
+import { ModalService } from '../modal/services/modal.service'
+import { FilterChip } from './models/filter.model'
+import { FilterService } from './services/filter.service'
 import { FilterModalComponent } from './filter-modal/filter-modal.component'
 
 @Component({
@@ -26,19 +26,14 @@ import { FilterModalComponent } from './filter-modal/filter-modal.component'
         ChipComponent
     ]
 })
-export class FilterComponent<T = any>
-    implements OnInit, OnDestroy
-{
+export class FilterComponent implements OnInit, OnDestroy {
     private _modalService = inject(ModalService)
-    private _filterService = inject(FilterService<T>)
+    private _filterService = inject(FilterService)
 
     // Входящие сигналы
     filterModalTitle = input('Фильтры')
     showFilterCount = input(true)
     compactMode = input(false)
-
-    // Локальное состояние
-    private _modalRef: any
 
     // Вычисляемые сигналы
     readonly chips = computed(() =>
@@ -52,14 +47,14 @@ export class FilterComponent<T = any>
     )
 
     // Outputs
-    chipRemoved = output<FilterChip>()
+    chipRemoved = output<string>()
     filterModalOpened = output<void>()
     filtersCleared = output<void>()
     filtersApplied = output<void>()
 
     ngOnInit(): void {
-        // Загружаем сохраненные фильтры и сохраняем их в pending при инициализации
-        this._filterService.saveToPending()
+        // Загружаем сохраненные фильтры и сохраняем их в modalFilters при инициализации
+        this._filterService.resetModalFilters()
     }
 
     ngOnDestroy(): void {
@@ -68,40 +63,56 @@ export class FilterComponent<T = any>
 
     // Открытие модального окна
     onOpenFilterModal(): void {
-        this._filterService.saveToPending()
+        this._filterService.resetModalFilters()
 
-        this._modalRef = this._modalService.open(
-            FilterModalComponent,
-            {
-                title: this.filterModalTitle(),
-                hasActions: true,
-                data: {
-                    filterService: this._filterService
+        this._modalService.open(FilterModalComponent, {
+            title: this.filterModalTitle(),
+            data: {
+                filterService: this._filterService
+            },
+            actions: [
+                {
+                    variant: 'white-bordered',
+                    text: 'Сбросить',
+                    onClick: () => this.resetFilters()
+                },
+                {
+                    variant: 'primary',
+                    text: 'Применить',
+                    onClick: () => this.applyFilters()
                 }
-            }
-        )
+            ]
+        })
 
         this.filterModalOpened.emit()
     }
 
+    // Действия модального окна
+    applyFilters(): void {
+        // Применяем pending фильтры
+        this._filterService.applyModalFilters()
+        this._modalService.close()
+    }
+
+    resetFilters(): void {
+        this._filterService.resetModalFilters()
+    }
+
     // Удаление чипса
     onRemoveChip(chip: FilterChip): void {
-        this._filterService.clearFilter(chip.type)
-        this.chipRemoved.emit(chip)
+        this._filterService.clearFilter(chip.key)
+        this.chipRemoved.emit(chip.key)
     }
 
     // Очистка всех фильтров
     onClearAllFilters(): void {
         this._filterService.clearAll()
-        this._filterService.saveToPending()
+        this._filterService.resetModalFilters()
         this.filtersCleared.emit()
     }
 
     // Закрытие модального окна
     private _closeModal(): void {
-        if (this._modalRef) {
-            this._modalRef.close()
-            this._modalRef = null
-        }
+        this._modalService.close()
     }
 }

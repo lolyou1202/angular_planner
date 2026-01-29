@@ -19,7 +19,7 @@
 
     @if (hasActiveFilters()) {
     <div class="filter__chips-container">
-        @for (chip of chips(); track chip.type) {
+        @for (chip of chips(); track chip.key) {
         <app-chip
             [label]="chip.label"
             (removed)="onRemoveChip(chip)"
