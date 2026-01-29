@@ -5,18 +5,18 @@ import {
     FilterConfigOption,
     FilterConfigType,
     FilterStateValue
-} from './filter.model'
+} from '../models/filter.model'
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FilterChipBuilder {
     build(
         config: FilterConfig,
         value: FilterStateValue
     ): FilterChip {
         return {
-            type: config.key,
+            key: config.key,
             label: config.label,
-            displayValue: this.formatDisplayValue({
+            displayValue: this._formatDisplayValue({
                 configType: config.type,
                 configOptions: config.options || [],
                 value
@@ -24,7 +24,7 @@ export class FilterChipBuilder {
         }
     }
 
-    private formatDisplayValue({
+    private _formatDisplayValue({
         configType,
         configOptions,
         value
@@ -35,19 +35,19 @@ export class FilterChipBuilder {
     }): string {
         switch (configType) {
             case 'multiselect':
-                return this.formatMultiselect({
+                return this._formatMultiselect({
                     configOptions,
                     value
                 })
 
             case 'range':
-                return this.formatRange({ value })
+                return this._formatRange({ value })
 
             case 'boolean':
-                return this.formatBoolean({ value })
+                return this._formatBoolean({ value })
 
             case 'string':
-                return this.formatString({
+                return this._formatString({
                     configOptions,
                     value
                 })
@@ -57,7 +57,7 @@ export class FilterChipBuilder {
         }
     }
 
-    private formatMultiselect({
+    private _formatMultiselect({
         configOptions,
         value
     }: {
@@ -69,7 +69,7 @@ export class FilterChipBuilder {
         }
         return value
             .map(v =>
-                this.findOptionLabel({
+                this._findOptionLabel({
                     configOptions,
                     value: v
                 })
@@ -78,7 +78,7 @@ export class FilterChipBuilder {
             .join(', ')
     }
 
-    private formatRange({
+    private _formatRange({
         value
     }: {
         value: FilterStateValue
@@ -94,7 +94,7 @@ export class FilterChipBuilder {
         return `${value.from} — ${value.to}`
     }
 
-    private formatBoolean({
+    private _formatBoolean({
         value
     }: {
         value: FilterStateValue
@@ -105,7 +105,7 @@ export class FilterChipBuilder {
         return value ? 'Да' : 'Нет'
     }
 
-    private formatString({
+    private _formatString({
         configOptions,
         value
     }: {
@@ -117,7 +117,7 @@ export class FilterChipBuilder {
         }
 
         if (configOptions) {
-            const optionLabel = this.findOptionLabel({
+            const optionLabel = this._findOptionLabel({
                 configOptions,
                 value
             })
@@ -129,7 +129,7 @@ export class FilterChipBuilder {
         return ''
     }
 
-    private findOptionLabel({
+    private _findOptionLabel({
         configOptions,
         value
     }: {

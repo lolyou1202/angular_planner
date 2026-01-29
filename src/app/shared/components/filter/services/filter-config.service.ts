@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core'
-import { FilterConfig } from './filter.model'
+import { FilterConfig } from '../models/filter.model'
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FilterConfigService {
     private readonly _configs = signal<FilterConfig[]>([])
 

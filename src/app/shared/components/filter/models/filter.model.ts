@@ -1,8 +1,9 @@
 export interface FilterChip {
-    type: string // ключ фильтра (config.key)
+    key: string // ключ фильтра (config.key)
     label: string // отображаемое имя фильтра
     displayValue: string // отформатированное значение для отображения
 }
+
 export type FilterConfigType =
     | 'string'
     | 'boolean'
