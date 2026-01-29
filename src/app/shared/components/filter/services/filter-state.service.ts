@@ -6,7 +6,7 @@ import {
 
 const FILTER_STORAGE_KEY = 'app_filters'
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class FilterStateService {
     private readonly _state = signal<FilterState>(
         this._loadFromStorage()

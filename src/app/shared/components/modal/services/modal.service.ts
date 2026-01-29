@@ -4,9 +4,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay'
 import { ModalComponent } from '../modal.component'
 import { ModalConfig } from '../models/modal.model'
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ModalService {
     private _overlay = inject(Overlay)
 

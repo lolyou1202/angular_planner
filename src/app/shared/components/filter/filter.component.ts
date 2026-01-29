@@ -11,7 +11,7 @@ import { BorderGroupComponent } from '../border-group/border-group.component'
 import { BorderGroupChildComponent } from '../border-group-child/border-group-child.component'
 import { ChipComponent } from '../chip/chip.component'
 import { ModalService } from '../modal/services/modal.service'
-import { FilterChip } from './models/filter.model'
+import { FilterChip, FilterConfig } from './models/filter.model'
 import { FilterService } from './services/filter.service'
 import { FilterModalComponent } from './filter-modal/filter-modal.component'
 
@@ -24,13 +24,15 @@ import { FilterModalComponent } from './filter-modal/filter-modal.component'
         BorderGroupComponent,
         BorderGroupChildComponent,
         ChipComponent
-    ]
+    ],
+    providers: [ModalService, FilterService]
 })
 export class FilterComponent implements OnInit, OnDestroy {
     private _modalService = inject(ModalService)
     private _filterService = inject(FilterService)
 
     // Входящие сигналы
+    configs = input<FilterConfig[]>([])
     filterModalTitle = input('Фильтры')
     showFilterCount = input(true)
     compactMode = input(false)
@@ -53,8 +55,8 @@ export class FilterComponent implements OnInit, OnDestroy {
     filtersApplied = output<void>()
 
     ngOnInit(): void {
-        // Загружаем сохраненные фильтры и сохраняем их в modalFilters при инициализации
         this._filterService.resetModalFilters()
+        this._filterService.setConfigs(this.configs())
     }
 
     ngOnDestroy(): void {

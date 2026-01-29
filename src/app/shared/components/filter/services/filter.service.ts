@@ -8,7 +8,7 @@ import { FilterStateService } from './filter-state.service'
 import { FilterConfigService } from './filter-config.service'
 import { FilterChipBuilder } from './filter-chip-builder.service'
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class FilterService {
     // Сигналы состояния
     private readonly _state = inject(FilterStateService)

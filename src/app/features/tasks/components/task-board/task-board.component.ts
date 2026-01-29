@@ -6,6 +6,7 @@ import { InputComponent } from '../../../../shared/components/input/input.compon
 import { Group, Task } from '../../models/tasks.model'
 import { FilterModalComponent } from '../../../../shared/components/filter/filter-modal/filter-modal.component'
 import { FilterService } from '../../../../shared/components/filter/services/filter.service'
+import { FilterConfig } from '../../../../shared/components/filter/models/filter.model'
 
 @Component({
     selector: 'app-task-board',
@@ -23,6 +24,47 @@ export class TaskBoardComponent {
 
     protected readonly FilterModalComponent =
         FilterModalComponent
+
+    taskFilterConfigs: FilterConfig[] = [
+        {
+            key: 'priority',
+            type: 'multiselect',
+            label: 'Приоритет',
+            options: [
+                {
+                    value: 'low',
+                    label: 'Низкий'
+                },
+                {
+                    value: 'medium',
+                    label: 'Средний'
+                },
+                {
+                    value: 'hight',
+                    label: 'Высокий'
+                },
+                {
+                    value: 'neutral',
+                    label: 'Нейтральный'
+                }
+            ]
+        },
+        {
+            key: 'duration',
+            type: 'multiselect',
+            label: 'Длительность',
+            options: [
+                {
+                    value: 'long',
+                    label: 'Долго'
+                },
+                {
+                    value: 'quick',
+                    label: 'Быстро'
+                }
+            ]
+        }
+    ]
 
     groups: Group[] = [
         {
