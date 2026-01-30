@@ -1,8 +1,12 @@
 :host {
-    display: flex;
+  --icon-size: 16px;
 
-    svg {
-        width: var(--icon-size, 16px);
-        height: var(--icon-size, 16px);
-    }
+  display: block;
+
+  color: var(--color-dark);
+
+  svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+  }
 }
