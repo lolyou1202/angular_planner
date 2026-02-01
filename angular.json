@@ -109,23 +109,11 @@
 				"lint": {
 					"builder": "@angular-eslint/builder:lint",
 					"options": {
-						"stylePreprocessorOptions": {
-							"includePaths": [
-								"src/assets/styles"
-							]
-						},
 						"lintFilePatterns": [
 							"src/**/*.ts",
 							"src/**/*.html"
 						],
-						"cache": true,
-						"cacheLocation": "node_modules/.cache/.eslintcache",
 						"maxWarnings": 0
-					},
-					"configurations": {
-						"strict": {
-							"quiet": false
-						}
 					}
 				}
 			}
