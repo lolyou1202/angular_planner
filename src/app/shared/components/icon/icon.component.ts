@@ -16,11 +16,16 @@ import { IconNames } from './icon-names.type'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconComponent {
-    name = input.required<IconNames>()
-    color = input<string>()
+    public readonly name = input.required<IconNames>()
+    public readonly color = input<string>()
+    public readonly size = input<string>()
 
-    @HostBinding('style.color')
-    get hostStyleColor() {
+    @HostBinding('style.--icon-color')
+    public get hostStyleColor(): string | undefined {
         return this.color()
+    }
+    @HostBinding('style.--icon-size')
+    public get hostStyleSize(): string | undefined {
+        return this.size()
     }
 }

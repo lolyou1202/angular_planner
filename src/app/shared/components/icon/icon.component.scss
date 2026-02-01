@@ -1,12 +1,13 @@
 :host {
-  --icon-size: 16px;
+    --icon-size: 16px;
+    --icon-color: var(--color-dark);
 
-  display: block;
+    display: inline-flex;
 
-  color: var(--color-dark);
+    color: var(--icon-color);
+}
 
-  svg {
+.icon {
     width: var(--icon-size);
     height: var(--icon-size);
-  }
 }
