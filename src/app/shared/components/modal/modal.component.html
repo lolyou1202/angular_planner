@@ -1,38 +1,37 @@
 <div class="modal">
-    @if (config().title) {
     <div class="modal__header">
-        <h2 class="modal__title">
-            {{ config().title }}
-        </h2>
+        @if (modalConfig()?.title) {
+            <h2 class="modal__title">
+                {{ modalConfig()?.title }}
+            </h2>
+        }
         <app-button
             variant="transparent"
             icon="cross"
             class="modal__closebutton"
-            (click)="onClose()"
+            (click)="close()"
         ></app-button>
     </div>
-    }
 
     <div class="modal__content">
-        <ng-container #componentContainer></ng-container>
+        <ng-container #dynamicContent></ng-container>
 
-        @if (!childComponent && config().content) {
-        <p>{{ config().content }}</p>
-        } @else if (!childComponent) {
         <ng-content></ng-content>
-        }
     </div>
 
-    @if (config().actions) {
-    <div class="modal__footer">
-        @for (action of config().actions; track action.text) {
-        <app-button
-            [variant]="action.variant"
-            [text]="action.text"
-            [disabled]="action.disabled"
-            (click)="onActionClick(action)"
-        ></app-button>
-        }
-    </div>
+    @if (modalConfig()?.actions) {
+        <div class="modal__footer">
+            @for (
+                action of modalConfig()?.actions;
+                track action.text
+            ) {
+                <app-button
+                    [variant]="action.variant"
+                    [text]="action.text"
+                    [disabled]="action.disabled"
+                    (click)="onActionClick(action)"
+                ></app-button>
+            }
+        </div>
     }
 </div>

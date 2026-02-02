@@ -3,15 +3,22 @@ import {
     ViewChild,
     ViewContainerRef,
     ComponentRef,
-    OnDestroy,
+    DestroyRef,
+    Type,
+    AfterViewInit,
+    inject,
     output,
     signal,
-    Type,
-    AfterViewInit
+    input
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { ModalAction, ModalConfig } from './models/modal.model'
+import {
+    ModalAction,
+    ModalComponentConfig,
+    ModalRef
+} from './modal.model'
 import { ButtonComponent } from '../button/button.component'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
     selector: 'app-modal',
@@ -20,76 +27,106 @@ import { ButtonComponent } from '../button/button.component'
     templateUrl: 'modal.component.html',
     styleUrl: 'modal.component.scss'
 })
-export class ModalComponent implements AfterViewInit, OnDestroy {
-    @ViewChild('componentContainer', {
+export class ModalComponent implements AfterViewInit {
+    @ViewChild('dynamicContent', {
         read: ViewContainerRef,
-        static: true
+        static: false
     })
-    componentContainer!: ViewContainerRef
+    private _dynamicContent!: ViewContainerRef
 
-    closed = output()
+    public readonly modalConfig = input<ModalComponentConfig>()
+    public readonly childComponent = input<Type<any>>()
+    public readonly childComponentData = input<any>()
+    public readonly modalRef = input<ModalRef>()
 
-    private _config = signal<ModalConfig>({})
-    protected readonly config = this._config.asReadonly()
+    public readonly isOpen = signal<boolean>(false)
 
-    private _childComponent: Type<any> | null = null
+    public closed = output<any>()
 
-    private _componentRef: ComponentRef<any> | null = null
+    private _componentRef?: ComponentRef<any>
+    private _destroyRef = inject(DestroyRef)
 
-    setConfig(config: ModalConfig): void {
-        this._config.set(config)
+    public ngAfterViewInit(): void {
+        this.isOpen.set(true)
+        this._loadDynamicComponent()
     }
 
-    ngAfterViewInit() {
-        if (this._childComponent) {
-            this._loadComponent()
-        }
-    }
+    private _loadDynamicComponent(): void {
+        const childComponent = this.childComponent()
+        const childComponentData = this.childComponentData()
+        const modalConfig = this.modalConfig()
 
-    set childComponent(component: Type<any> | null) {
-        this._childComponent = component
-        if (component && this.componentContainer) {
-            this._loadComponent()
-        }
-    }
+        if (childComponent && this._dynamicContent) {
+            // Очищаем контейнер
+            this._dynamicContent.clear()
 
-    get childComponent(): Type<any> | null {
-        return this._childComponent
-    }
-
-    private _loadComponent(): void {
-        if (this.childComponent && this.componentContainer) {
-            this.componentContainer.clear()
+            // Создаем компонент
             this._componentRef =
-                this.componentContainer.createComponent(
-                    this.childComponent
+                this._dynamicContent.createComponent(
+                    childComponent
                 )
 
-            if (
-                this.config().data &&
-                this._componentRef.instance
-            ) {
+            // Передаем данные в компонент
+            if (childComponentData) {
                 Object.assign(
                     this._componentRef.instance,
-                    this.config().data
+                    childComponentData
                 )
             }
+
+            // Передаем modalRef в дочерний компонент, если нужно
+            if (this._componentRef.instance.modalRef) {
+                this._componentRef.instance.modalRef =
+                    this.modalRef()
+            }
+
+            // Передаем config.data в дочерний компонент
+            if (modalConfig?.data) {
+                Object.assign(
+                    this._componentRef.instance,
+                    modalConfig.data
+                )
+            }
+
+            // Обрабатываем события закрытия из дочернего компонента
+            if (this._componentRef.instance.closeModal) {
+                this._componentRef.instance.closeModal
+                    .pipe(takeUntilDestroyed(this._destroyRef))
+                    .subscribe((result: any) => {
+                        this.close(result)
+                    })
+            }
+
+            this._componentRef.changeDetectorRef.detectChanges()
         }
     }
 
-    onActionClick(action: ModalAction): void {
+    public onBackdropClick(event: MouseEvent): void {
+        const target = event.target as HTMLElement
+        const modalConfig = this.modalConfig()
+
+        if (
+            target.classList.contains('modal-container') &&
+            modalConfig?.closeOnBackdropClick !== false
+        ) {
+            this.close()
+        }
+    }
+
+    public onActionClick(action: ModalAction): void {
         if (action.onClick) {
             action.onClick()
         }
     }
 
-    onClose(): void {
-        this.closed.emit()
-    }
+    public close(result?: any): void {
+        this.isOpen.set(false)
 
-    ngOnDestroy(): void {
-        if (this._componentRef) {
-            this._componentRef.destroy()
+        const modalRef = this.modalRef()
+        if (modalRef) {
+            modalRef.close(result)
+        } else {
+            this.closed.emit(result)
         }
     }
 }
