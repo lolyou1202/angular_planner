@@ -6,20 +6,21 @@ import {
     input,
     inject,
     DestroyRef,
-    OutputRefSubscription
+    OutputRefSubscription,
+    ChangeDetectionStrategy
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { BorderGroupChildComponent } from '../border-group-child/border-group-child.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-
-export type HoverMode = 'individual-hover' | 'group-hover'
+import { HoverMode } from './border-group-hover-mode.type'
 
 @Component({
     selector: 'app-border-group',
     standalone: true,
     templateUrl: 'border-group.component.html',
     styleUrl: 'border-group.component.scss',
-    imports: [CommonModule]
+    imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BorderGroupComponent implements AfterContentInit {
     @ContentChildren(BorderGroupChildComponent)

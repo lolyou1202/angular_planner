@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     booleanAttribute,
     input,
@@ -15,7 +16,8 @@ import { BorderGroupPosition } from './border-group-child-position.type'
     standalone: true,
     templateUrl: 'border-group-child.component.html',
     styleUrl: 'border-group-child.component.scss',
-    imports: [CommonModule, IconComponent]
+    imports: [CommonModule, IconComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BorderGroupChildComponent {
     public readonly icon = input<IconNames>()
