@@ -55,7 +55,9 @@
 									"maximumError": "8kB"
 								}
 							],
-							"outputHashing": "all"
+							"outputHashing": "all",
+							"baseHref": "/angular_planner/",
+							"deployUrl": "/angular_planner/"
 						},
 						"development": {
 							"optimization": false,
@@ -115,6 +117,9 @@
 						],
 						"maxWarnings": 0
 					}
+				},
+				"deploy": {
+					"builder": "angular-cli-ghpages:deploy"
 				}
 			}
 		}
