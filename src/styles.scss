@@ -79,10 +79,10 @@ body {
 .bordered-element {
     --widthWithoutShadow: calc(var(--width) - 2 * var(--shadow-width));
     --heightWithoutShadow: calc(var(--height) - 2 * var(--shadow-width));
-    --shadow-color: var(--border-color);
-    --shadow-color-hover: var(--border-color-hover);
-    --shadow-default: 0 0 0 var(--shadow-width) var(--shadow-color);
-    --shadow-hover: 0 0 0 var(--shadow-width) var(--shadow-color-hover);
+    --color-shadow: var(--color-border);
+    --color-shadow-hover: var(--color-border-hover);
+    --shadow-default: 0 0 0 var(--shadow-width) var(--color-shadow);
+    --shadow-hover: 0 0 0 var(--shadow-width) var(--color-shadow-hover);
 
     position: relative;
 
