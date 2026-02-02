@@ -117,6 +117,9 @@
 						],
 						"maxWarnings": 0
 					}
+				},
+				"deploy": {
+					"builder": "angular-cli-ghpages:deploy"
 				}
 			}
 		}
