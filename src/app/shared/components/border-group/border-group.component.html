@@ -1,0 +1,8 @@
+<div
+    class="border-group"
+    [ngClass]="[hoverMode()]"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
+>
+    <ng-content></ng-content>
+</div>
