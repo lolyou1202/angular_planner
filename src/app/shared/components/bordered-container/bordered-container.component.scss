@@ -1,0 +1,58 @@
+:host {
+    --width-container: 100%;
+    --height-container: 100%;
+    --border-radius-container: 0;
+    --color-shadow: var(--color-border);
+    --color-shadow-hover: var(--color-border-hover);
+
+    --widthWithoutShadow: calc(var(--width-container) - 2 * var(--border-width));
+    --heightWithoutShadow: calc(var(--height-container) - 2 * var(--border-width));
+
+    --shadow-default: 0 0 0 var(--border-width) var(--color-shadow);
+    --shadow-hover: 0 0 0 var(--border-width) var(--color-shadow-hover);
+
+	display: inline-flex;
+	height: 100%;
+}
+
+.bordered-container {
+    display: inline-flex;
+    position: relative;
+
+    height: var(--width-container);
+    width: var(--height-container);
+
+    cursor: default;
+    user-select: none;
+    transition: box-shadow 0.2s ease;
+
+    &::before, &::after {
+        content: '';
+        position: absolute;
+        z-index: 10;
+        top: var(--border-width);
+        left: var(--border-width);
+
+        height: var(--heightWithoutShadow);
+        width: var(--widthWithoutShadow);
+
+        box-shadow: var(--shadow-default);
+        border-radius: var(--border-radius-container);
+    }
+    &::after {
+        opacity: 0;
+        transition:
+            opacity 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    &.--hover.with-hover-mode,
+    &:hover.with-hover-mode {
+        cursor: pointer;
+
+        &::after {
+            box-shadow: var(--shadow-hover);
+            opacity: 1;
+        }
+    }
+}

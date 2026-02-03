@@ -1,0 +1,1 @@
+export type BorderGroupPosition = 'first' | 'middle' | 'last' | 'single'
