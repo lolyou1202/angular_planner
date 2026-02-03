@@ -1,0 +1,10 @@
+:host {
+    display: flex;
+}
+
+.border-group {
+    display: flex;
+    gap: 0;
+
+    margin: var(--shadow-width);
+}
