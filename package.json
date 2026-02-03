@@ -10,7 +10,8 @@
 		"lint": "ng lint",
 		"lint:fix": "ng lint --fix",
 		"format": "prettier --write \"src/**/*.{ts,html,scss,css,json,md}\"",
-		"format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json,md}\""
+		"format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json,md}\"",
+		"deploy": "npm run build:github && npx angular-cli-ghpages --dir=dist/my-app"
 	},
 	"private": true,
 	"dependencies": {
@@ -30,15 +31,16 @@
 	},
 	"devDependencies": {
 		"@angular-devkit/build-angular": "^20.2.0",
-		"@angular/cli": "^20.2.0",
-		"@angular/compiler-cli": "^20.2.0",
 		"@angular-eslint/builder": "^18.4.3",
 		"@angular-eslint/eslint-plugin": "^18.4.3",
 		"@angular-eslint/eslint-plugin-template": "^18.4.3",
 		"@angular-eslint/schematics": "^18.4.3",
 		"@angular-eslint/template-parser": "^18.4.3",
+		"@angular/cli": "^20.2.0",
+		"@angular/compiler-cli": "^20.2.0",
 		"@typescript-eslint/eslint-plugin": "^7.18.0",
 		"@typescript-eslint/parser": "^7.18.0",
+		"angular-cli-ghpages": "^3.0.2",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.2.1",
