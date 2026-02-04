@@ -120,7 +120,8 @@ body {
         cursor: default;
     }
 
-    &-hover:not(.disable-hover-mode) {
+    &-hover:not(.disable-hover-mode),
+    &:hover:not(.disable-hover-mode) {
         &::after {
             box-shadow: var(--shadow-hover);
             opacity: 1;
