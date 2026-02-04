@@ -1,10 +1,8 @@
 :host {
-    display: flex;
+    display: inline-flex;
 }
 
 .border-group {
     display: flex;
     gap: 0;
-
-    margin: var(--shadow-width);
 }
