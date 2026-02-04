@@ -10,17 +10,14 @@
 
     --shadow-default: 0 0 0 var(--border-width) var(--color-shadow);
     --shadow-hover: 0 0 0 var(--border-width) var(--color-shadow-hover);
-
-	display: inline-flex;
-	height: 100%;
 }
 
 .bordered-container {
     display: inline-flex;
     position: relative;
 
-    height: var(--width-container);
-    width: var(--height-container);
+    width: var(--width-container);
+    height: var(--height-container);
 
     cursor: default;
     user-select: none;
@@ -40,6 +37,7 @@
         border-radius: var(--border-radius-container);
     }
     &::after {
+		z-index: 11;
         opacity: 0;
         transition:
             opacity 0.2s ease,
