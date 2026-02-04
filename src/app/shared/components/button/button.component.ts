@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { IconComponent } from '../icon/icon.component'
 import { IconNames } from '../icon/icon-names.type'
@@ -10,7 +10,8 @@ import { BorderedContainerComponent } from '../bordered-container/bordered-conta
     standalone: true,
     imports: [CommonModule, IconComponent, BorderedContainerComponent],
     templateUrl: './button.component.html',
-    styleUrl: './button.component.scss'
+    styleUrl: './button.component.scss',
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonComponent {
     public readonly variant = input<ButtonVariant>('white-bordered')
