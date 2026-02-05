@@ -12,33 +12,36 @@
     align-items: center;
     gap: var(--gap);
 
-    padding: 0 8px;
-
     background: var(--background-color);
     border: none;
 
     cursor: pointer;
 
-    &.first,
-    &.first::after {
-        border-radius: var(--border-radius) 0 0 var(--border-radius);
+    &.first &__container {
+        --border-radius-container: var(--border-radius) 0 0 var(--border-radius);
     }
-    &.middle,
-    &.middle::after {
-        border-radius: 0;
+    &.middle &__container {
+        --border-radius-container: 0;
     }
-    &.last,
-    &.last::after {
-        border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    &.last &__container {
+        --border-radius-container: 0 var(--border-radius) var(--border-radius) 0;
+    }
+    &.single &__container {
+        --border-radius-container: var(--border-radius);
     }
     &.middle,
     &.last {
-        margin-left: var(--shadow-width);
+        margin-left: calc(0px - var(--border-width));
     }
-    &.single,
-    &.single::after {
-        border-radius: var(--border-radius);
-    }
+
+    &__content-container {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+
+		padding: 0 8px;
+		height: var(--height);
+	}
 
     &__icon {
         --icon-size: 16px;
