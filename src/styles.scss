@@ -52,7 +52,7 @@
     --color-circle-indicator-medium: var(--token-orange-3);
     --color-circle-indicator-low: var(--token-red-3);
 
-    --shadow-width: 1px;
+    --border-width: 1px;
 }
 
 *,
@@ -74,65 +74,4 @@ body {
     height: 20px;
 
     background: var(--border-color);
-}
-
-.bordered-element {
-    --widthWithoutShadow: calc(var(--width) - 2 * var(--shadow-width));
-    --heightWithoutShadow: calc(var(--height) - 2 * var(--shadow-width));
-    --color-shadow: var(--color-border);
-    --color-shadow-hover: var(--color-border-hover);
-    --shadow-default: 0 0 0 var(--shadow-width) var(--color-shadow);
-    --shadow-hover: 0 0 0 var(--shadow-width) var(--color-shadow-hover);
-
-    position: relative;
-
-    height: var(--heightWithoutShadow);
-    width: var(--widthWithoutShadow);
-
-    box-shadow: var(--shadow-default);
-    border-radius: var(--border-radius);
-
-    user-select: none;
-    transition: box-shadow 0.2s ease;
-
-    &:not(.disable-hover-mode) {
-        &::after {
-            content: '';
-            position: absolute;
-            z-index: 10;
-            top: 0;
-            left: 0;
-
-            width: 100%;
-            height: 100%;
-
-            box-shadow: var(--shadow-default);
-            border-radius: var(--border-radius);
-
-            opacity: 0;
-            transition:
-                opacity 0.2s ease,
-                box-shadow 0.2s ease;
-        }
-    }
-
-    &.disable-hover-mode {
-        cursor: default;
-    }
-
-    &-hover:not(.disable-hover-mode),
-    &:hover:not(.disable-hover-mode) {
-        &::after {
-            box-shadow: var(--shadow-hover);
-            opacity: 1;
-        }
-    }
-
-    &.only-icon {
-        justify-content: center;
-
-        padding: 0;
-
-        --width: var(--height);
-    }
 }
