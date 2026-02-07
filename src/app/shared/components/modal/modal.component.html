@@ -1,9 +1,11 @@
 <div class="modal">
     <div class="modal__header">
-        @if (modalConfig()?.title) {
+        @if (modalConfig.title; as title) {
             <h2 class="modal__title">
-                {{ modalConfig()?.title }}
+                {{ title }}
             </h2>
+        } @else {
+            <h2 class="modal__title">__TITLE__</h2>
         }
         <app-button
             variant="transparent"
@@ -19,14 +21,14 @@
         <ng-content></ng-content>
     </div>
 
-    @if (modalConfig()?.actions) {
+    @if (modalConfig.actions; as actions) {
         <div class="modal__footer">
-            @for (action of modalConfig()?.actions; track action.text) {
+            @for (action of actions; let i = $index; track i) {
                 <app-button
                     [variant]="action.variant"
                     [text]="action.text"
                     [disabled]="action.disabled"
-                    (click)="onActionClick(action)"
+                    (click)="action.onClick?.()"
                 ></app-button>
             }
         </div>

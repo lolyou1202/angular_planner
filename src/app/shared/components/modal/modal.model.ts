@@ -27,15 +27,8 @@ export interface ModalComponentConfig<T = unknown> extends ModalConfig<T> {
     modalId: string
 }
 
-export interface ModalRef<T = unknown> {
+export interface ModalRef {
     close: () => void
-    afterClosed: Observable<unknown>
-    componentInstance?: T
+    afterClosed: Observable<void>
     id: string
-}
-
-export interface BaseModalComponent {
-    modalData?: Record<string, unknown>
-    modalRef?: ModalRef<unknown>
-    closeModal?: Observable<void>
 }

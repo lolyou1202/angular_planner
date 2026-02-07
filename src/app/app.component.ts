@@ -16,7 +16,8 @@ export class AppComponent {
         const modalRef = this._modalService.open(TestBaseComponent, {
             title: '__TITLE__',
             data: {
-                asd: 'asd'
+                asd: 'asd',
+                anotherProperty: 123
             },
             actions: [
                 {

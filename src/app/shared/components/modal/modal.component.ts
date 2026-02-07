@@ -3,24 +3,21 @@ import {
     ViewChild,
     ViewContainerRef,
     ComponentRef,
-    DestroyRef,
-    Type,
     AfterViewInit,
     inject,
     output,
     signal,
-    input,
-    ChangeDetectionStrategy
+    ChangeDetectionStrategy,
+    Injector
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import {
-    BaseModalComponent,
-    ModalAction,
-    ModalComponentConfig,
-    ModalRef
-} from './modal.model'
 import { ButtonComponent } from '../button/button.component'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import {
+    MODAL_CHILD_COMPONENT,
+    MODAL_CONFIG,
+    MODAL_DATA,
+    MODAL_REF
+} from './modal.tokens'
 
 @Component({
     selector: 'app-modal',
@@ -37,17 +34,15 @@ export class ModalComponent implements AfterViewInit {
     })
     private _dynamicContent!: ViewContainerRef
 
-    public readonly modalConfig = input<ModalComponentConfig>()
-    public readonly childComponent = input<Type<BaseModalComponent>>()
-    public readonly childComponentData = input<Record<string, unknown>>()
-    public readonly modalRef = input<ModalRef>()
+    private _componentRef?: ComponentRef<unknown>
+    private _injector = inject(Injector)
+
+    public modalConfig = inject(MODAL_CONFIG)
+    private _childComponent = inject(MODAL_CHILD_COMPONENT)
+    private _modalRef = inject(MODAL_REF, { optional: true })
 
     public readonly isOpen = signal<boolean>(false)
-
     public closed = output<void>()
-
-    private _componentRef?: ComponentRef<BaseModalComponent>
-    private _destroyRef = inject(DestroyRef)
 
     public ngAfterViewInit(): void {
         this.isOpen.set(true)
@@ -55,60 +50,31 @@ export class ModalComponent implements AfterViewInit {
     }
 
     private _loadDynamicComponent(): void {
-        const childComponent = this.childComponent()
-        const childComponentData = this.childComponentData()
-
-        if (childComponent && this._dynamicContent) {
-            // Очищаем контейнер
+        if (this._childComponent && this._dynamicContent) {
             this._dynamicContent.clear()
 
-            // Создаем компонент
-            this._componentRef =
-                this._dynamicContent.createComponent(childComponent)
+            const componentInjector = Injector.create({
+                providers: [
+                    { provide: MODAL_DATA, useValue: this.modalConfig?.data },
+                    { provide: MODAL_REF, useValue: this._modalRef }
+                ],
+                parent: this._injector
+            })
 
-            // Передаем данные в компонент
-            this._componentRef.instance.modalData = childComponentData
-
-            // Передаем modalRef в дочерний компонент
-            this._componentRef.instance.modalRef = this.modalRef()
-
-            // Обрабатываем события закрытия из дочернего компонента
-            if (this._componentRef.instance.closeModal) {
-                this._componentRef.instance.closeModal
-                    .pipe(takeUntilDestroyed(this._destroyRef))
-                    .subscribe(() => {
-                        this.close()
-                    })
-            }
+            this._componentRef = this._dynamicContent.createComponent(
+                this._childComponent,
+                { injector: componentInjector }
+            )
 
             this._componentRef.changeDetectorRef.detectChanges()
-        }
-    }
-
-    public onBackdropClick(event: MouseEvent): void {
-        const target = event.target as HTMLElement
-        const modalConfig = this.modalConfig()
-
-        if (
-            target.classList.contains('modal-container') &&
-            modalConfig?.closeOnBackdropClick !== false
-        ) {
-            this.close()
-        }
-    }
-
-    public onActionClick(action: ModalAction): void {
-        if (action.onClick) {
-            action.onClick()
         }
     }
 
     public close(): void {
         this.isOpen.set(false)
 
-        const modalRef = this.modalRef()
-        if (modalRef) {
-            modalRef.close()
+        if (this._modalRef) {
+            this._modalRef.close()
         } else {
             this.closed.emit()
         }

@@ -1,26 +1,17 @@
-import {
-    Injectable,
-    Type,
-    inject,
-    OnDestroy,
-    ComponentRef
-} from '@angular/core'
+import { Injectable, Type, inject, OnDestroy, Injector } from '@angular/core'
 import { Overlay, OverlayRef, OverlayConfig } from '@angular/cdk/overlay'
 import { ComponentPortal } from '@angular/cdk/portal'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { ModalComponent } from './modal.component'
-import {
-    BaseModalComponent,
-    ModalComponentConfig,
-    ModalConfig,
-    ModalRef
-} from './modal.model'
+import { ModalComponentConfig, ModalConfig, ModalRef } from './modal.model'
+import { MODAL_CHILD_COMPONENT, MODAL_CONFIG, MODAL_REF } from './modal.tokens'
 
 @Injectable({
     providedIn: 'root'
 })
 export class ModalService implements OnDestroy {
+    private _injector = inject(Injector)
     private _overlay = inject(Overlay)
     private _destroy$ = new Subject<void>()
 
@@ -28,14 +19,14 @@ export class ModalService implements OnDestroy {
     private _modalStack: Array<{
         id: string
         overlayRef: OverlayRef
-        modalRef: ModalRef<unknown>
+        modalRef: ModalRef
     }> = []
 
     /** Открыть модальное окно с указанным компонентом */
-    public open<T extends BaseModalComponent, D = unknown>(
+    public open<T, D = unknown>(
         component?: Type<T>,
         config: ModalConfig<D> = {}
-    ): ModalRef<T> {
+    ): ModalRef {
         // Генерируем уникальный ID для модального окна
         const modalId = this._generateModalId()
 
@@ -45,31 +36,38 @@ export class ModalService implements OnDestroy {
         // Создаем overlay
         const overlayRef = this._overlay.create(overlayConfig)
 
-        // Создаем portal для модального компонента
-        const modalPortal = new ComponentPortal(ModalComponent)
-        const modalComponentRef = overlayRef.attach(modalPortal)
-
         // Создаем объект ModalRef для управления модальным окном
-        const modalRef = this._createModalRef<T>(overlayRef, modalId)
+        const modalRef = this._createModalRef(overlayRef, modalId)
 
-        // Инициализируем модальное окно
-        this._initializeModal<T, D>(
-            modalComponentRef,
-            component,
-            config,
-            modalRef,
-            modalId
+        const modalInjector = Injector.create({
+            providers: [
+                {
+                    provide: MODAL_CONFIG,
+                    useValue: { ...config, modalId } as ModalComponentConfig<D>
+                },
+                { provide: MODAL_CHILD_COMPONENT, useValue: component },
+                { provide: MODAL_REF, useValue: modalRef }
+            ],
+            parent: this._injector // Используем текущий инжектор как родительский
+        })
+
+        // Создаем portal для модального компонента
+        const modalPortal = new ComponentPortal(
+            ModalComponent,
+            null,
+            modalInjector
         )
+        overlayRef.attach(modalPortal)
 
         // Сохраняем в стек
         this._modalStack.push({
             id: modalId,
             overlayRef,
-            modalRef: modalRef as ModalRef<unknown>
+            modalRef
         })
 
         // Настраиваем обработку закрытия
-        this._setupCloseHandlers(overlayRef, modalRef, config, modalId)
+        this._setupCloseHandlers(overlayRef, modalRef, config)
 
         return modalRef
     }
@@ -85,7 +83,14 @@ export class ModalService implements OnDestroy {
             }
         } else {
             // Закрываем последнее окно (верхнее в стеке)
-            this._closeLastModal()
+            this.closeLastModal()
+        }
+    }
+
+    public closeLastModal(): void {
+        if (this._modalStack.length > 0) {
+            const lastModal = this._modalStack[this._modalStack.length - 1]
+            lastModal.modalRef.close()
         }
     }
 
@@ -110,9 +115,15 @@ export class ModalService implements OnDestroy {
     }
 
     /** Получить ModalRef по ID */
-    public getModalRef<T = unknown>(modalId: string): ModalRef<T> | null {
+    public getModalRef(modalId: string): ModalRef | null {
         const modal = this._modalStack.find(m => m.id === modalId)
-        return modal ? (modal.modalRef as ModalRef<T>) : null
+        return modal ? modal.modalRef : null
+    }
+
+    public ngOnDestroy(): void {
+        this._destroy$.next()
+        this._destroy$.complete()
+        this.closeAll()
     }
 
     private _generateModalId(): string {
@@ -161,16 +172,14 @@ export class ModalService implements OnDestroy {
         }
     }
 
-    private _createModalRef<T>(
-        overlayRef: OverlayRef,
-        modalId: string
-    ): ModalRef<T> {
-        const afterClosed$ = new Subject<T | undefined>()
-        const modalRef: ModalRef<T> = {
-            close: (result?: T) => {
-                afterClosed$.next(result)
+    private _createModalRef(overlayRef: OverlayRef, modalId: string): ModalRef {
+        const afterClosed$ = new Subject<void>()
+        const modalRef: ModalRef = {
+            close: () => {
+                afterClosed$.next()
                 afterClosed$.complete()
                 overlayRef.dispose()
+
                 // Удаляем из стека
                 const index = this._modalStack.findIndex(m => m.id === modalId)
                 if (index !== -1) {
@@ -183,44 +192,10 @@ export class ModalService implements OnDestroy {
         return modalRef
     }
 
-    private _initializeModal<T extends BaseModalComponent, D>(
-        modalComponentRef: ComponentRef<ModalComponent>,
-        component?: Type<T>,
-        config?: ModalConfig<D>,
-        modalRef?: ModalRef<T>,
-        modalId?: string
-    ): void {
-        // Создаем конфигурацию для компонента
-        const componentConfig: ModalComponentConfig<D> = {
-            modalId: modalId || '',
-            ...config,
-            data: config?.data
-        }
-
-        // Передаем конфигурацию в модальный компонент
-        modalComponentRef.setInput('modalConfig', componentConfig)
-
-        // Устанавливаем дочерний компонент, если передан
-        if (component) {
-            modalComponentRef.setInput('childComponent', component)
-        }
-
-        // Передаем данные для дочернего компонента
-        if (config?.data) {
-            modalComponentRef.setInput('childComponentData', config.data)
-        }
-
-        // Передаем ModalRef для управления изнутри компонента
-        if (modalRef) {
-            modalComponentRef.setInput('modalRef', modalRef)
-        }
-    }
-
-    private _setupCloseHandlers<T>(
+    private _setupCloseHandlers(
         overlayRef: OverlayRef,
-        modalRef: ModalRef<T>,
-        config: ModalConfig,
-        modalId: string
+        modalRef: ModalRef,
+        config: ModalConfig
     ): void {
         // Закрытие по клику на бэкдроп
         if (config.closeOnBackdropClick !== false) {
@@ -238,7 +213,9 @@ export class ModalService implements OnDestroy {
             .pipe(takeUntil(this._destroy$))
             .subscribe(() => {
                 // Удаляем из стека при детаче
-                const index = this._modalStack.findIndex(m => m.id === modalId)
+                const index = this._modalStack.findIndex(
+                    m => m.id === modalRef.id
+                )
                 if (index !== -1) {
                     this._modalStack.splice(index, 1)
                 }
@@ -252,23 +229,10 @@ export class ModalService implements OnDestroy {
                 if (event.code === 'Escape') {
                     // Закрываем верхнее модальное окно
                     const topModalId = this.getTopModalId()
-                    if (topModalId === modalId) {
+                    if (topModalId === modalRef.id) {
                         modalRef.close()
                     }
                 }
             })
-    }
-
-    private _closeLastModal(): void {
-        if (this._modalStack.length > 0) {
-            const lastModal = this._modalStack[this._modalStack.length - 1]
-            lastModal.modalRef.close()
-        }
-    }
-
-    public ngOnDestroy(): void {
-        this._destroy$.next()
-        this._destroy$.complete()
-        this.closeAll()
     }
 }
