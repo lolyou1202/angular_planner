@@ -6,7 +6,11 @@
 </app-border-group>
 <app-border-group hoverMode="individual-hover">
     <app-border-group-child text="Фильтры" />
-    <app-border-group-child text="Фильтры" icon="plus" />
+    <app-border-group-child
+        text="Фильтры"
+        icon="plus"
+        (click)="onClickModal()"
+    />
     <app-border-group-child icon="cross" />
 </app-border-group>
 <app-border-group hoverMode="group-hover">

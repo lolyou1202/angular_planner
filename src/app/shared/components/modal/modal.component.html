@@ -1,0 +1,36 @@
+<div class="modal">
+    <div class="modal__header">
+        @if (modalConfig.title; as title) {
+            <h2 class="modal__title">
+                {{ title }}
+            </h2>
+        } @else {
+            <h2 class="modal__title">__TITLE__</h2>
+        }
+        <app-button
+            variant="transparent"
+            icon="cross"
+            class="modal__closebutton"
+            (click)="close()"
+        ></app-button>
+    </div>
+
+    <div class="modal__content">
+        <ng-container #dynamicContent></ng-container>
+
+        <ng-content></ng-content>
+    </div>
+
+    @if (modalConfig.actions; as actions) {
+        <div class="modal__footer">
+            @for (action of actions; let i = $index; track i) {
+                <app-button
+                    [variant]="action.variant"
+                    [text]="action.text"
+                    [disabled]="action.disabled"
+                    (click)="action.onClick?.()"
+                ></app-button>
+            }
+        </div>
+    }
+</div>
