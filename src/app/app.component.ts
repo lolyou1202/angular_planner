@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core'
 import { BorderGroupComponent } from './shared/components/border-group/border-group.component'
 import { BorderGroupChildComponent } from './shared/components/border-group-child/border-group-child.component'
-import { ModalService } from './shared/components/modal/modal.service'
-import { TestBaseComponent } from './shared/components/modal/test-base-modal.component'
+import { TestBaseComponent } from './shared/components/modal-forms/test-base-modal.component'
+import { ModalService } from './core/modal/modal.service'
+import { MenuService } from './core/menu/menu.service'
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -11,12 +13,16 @@ import { TestBaseComponent } from './shared/components/modal/test-base-modal.com
 })
 export class AppComponent {
     private _modalService = inject(ModalService)
+    private _menuService = inject(MenuService)
 
     public onClickModal(): void {
         const modalRef = this._modalService.open(TestBaseComponent, {
-            title: '__TITLE__',
+            title: 'asd',
             data: {
                 asd: 'asd',
+                qwe: {
+                    zxc: 'zxc'
+                },
                 anotherProperty: 123
             },
             actions: [
@@ -38,5 +44,32 @@ export class AppComponent {
         modalRef.afterClosed.subscribe(() => {
             console.log('asdasdasd')
         })
+    }
+
+    public openMenu(event: MouseEvent): void {
+        const origin = event.currentTarget as HTMLElement
+        if (origin) {
+            const menuRef = this._menuService.openMenu(origin, {
+                items: [
+                    {
+                        label: 'Редактировать',
+                        action: (): void => {
+                            this._menuService.close()
+                        }
+                    },
+                    {
+                        label: 'Копировать'
+                    },
+                    'separator',
+                    {
+                        label: 'Удалить',
+                        disabled: true
+                    },
+                    { label: 'Закрыть', action: (): void => menuRef.close() }
+                ]
+            })
+
+            menuRef.afterClosed.subscribe(() => console.log('Меню закрыто'))
+        }
     }
 }
