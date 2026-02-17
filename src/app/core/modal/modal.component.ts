@@ -11,13 +11,14 @@ import {
     Injector
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { ButtonComponent } from '../button/button.component'
+import { ModalConfig } from './modal.model'
 import {
-    MODAL_CHILD_COMPONENT,
-    MODAL_CONFIG,
-    MODAL_DATA,
-    MODAL_REF
-} from './modal.tokens'
+    OVERLAY_CHILD_COMPONENT,
+    OVERLAY_CONFIG,
+    OVERLAY_DATA,
+    OVERLAY_REF
+} from '../overlay/overlay.tokens'
+import { ButtonComponent } from '../../shared/components/button/button.component'
 
 @Component({
     selector: 'app-modal',
@@ -28,18 +29,16 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalComponent implements AfterViewInit {
-    @ViewChild('dynamicContent', {
-        read: ViewContainerRef,
-        static: false
-    })
+    @ViewChild('dynamicContent', { read: ViewContainerRef, static: false })
     private _dynamicContent!: ViewContainerRef
 
     private _componentRef?: ComponentRef<unknown>
     private _injector = inject(Injector)
 
-    public modalConfig = inject(MODAL_CONFIG)
-    private _childComponent = inject(MODAL_CHILD_COMPONENT)
-    private _modalRef = inject(MODAL_REF, { optional: true })
+    // Инжектим через общие токены
+    public modalConfig = inject<ModalConfig>(OVERLAY_CONFIG)
+    private _modalRef = inject(OVERLAY_REF)
+    private _childComponent = inject(OVERLAY_CHILD_COMPONENT)
 
     public readonly isOpen = signal<boolean>(false)
     public closed = output<void>()
@@ -55,8 +54,8 @@ export class ModalComponent implements AfterViewInit {
 
             const componentInjector = Injector.create({
                 providers: [
-                    { provide: MODAL_DATA, useValue: this.modalConfig?.data },
-                    { provide: MODAL_REF, useValue: this._modalRef }
+                    { provide: OVERLAY_DATA, useValue: this.modalConfig?.data },
+                    { provide: OVERLAY_REF, useValue: this._modalRef }
                 ],
                 parent: this._injector
             })
@@ -72,11 +71,7 @@ export class ModalComponent implements AfterViewInit {
 
     public close(): void {
         this.isOpen.set(false)
-
-        if (this._modalRef) {
-            this._modalRef.close()
-        } else {
-            this.closed.emit()
-        }
+        this._modalRef.close()
+        this.closed.emit()
     }
 }
