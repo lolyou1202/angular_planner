@@ -5,6 +5,7 @@
     --token-light-1: #f8f8f9;
     --token-light-2: #e4e4e7;
     --token-light-3: #f4f4f6;
+    --token-light-4: #f4f4f5;
     --token-gray-1: #c9c9ca;
     --token-gray-2: #b6b6ba;
     --token-dark: #3f3f46;
@@ -37,6 +38,7 @@
     --color-border-dark: var(--token-gray-2);
 
     --color-background: var(--token-light-1);
+    --color-background-hover: var(--token-light-4);
 
     --color-white: var(--token-white);
     --color-light: var(--token-gray-1);
@@ -67,11 +69,4 @@ body {
     margin: 40px;
 
     font-family: 'Lato', serif;
-}
-
-.divider {
-    width: 1px;
-    height: 20px;
-
-    background: var(--border-color);
 }

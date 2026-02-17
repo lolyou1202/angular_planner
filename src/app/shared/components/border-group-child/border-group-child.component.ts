@@ -9,15 +9,14 @@ import {
 import { CommonModule } from '@angular/common'
 import { IconComponent } from '../icon/icon.component'
 import { IconNames } from '../icon/icon-names.type'
-import { BorderGroupPosition } from './border-group-child-position.type'
-import { BorderedContainerComponent } from '../bordered-container/bordered-container.component'
+import { Direction } from '../border-group/border-group.model'
 
 @Component({
     selector: 'app-border-group-child',
     standalone: true,
     templateUrl: 'border-group-child.component.html',
     styleUrl: 'border-group-child.component.scss',
-    imports: [CommonModule, BorderedContainerComponent, IconComponent],
+    imports: [CommonModule, IconComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BorderGroupChildComponent {
@@ -26,19 +25,25 @@ export class BorderGroupChildComponent {
     public readonly disableHoverMode = input(false, {
         transform: booleanAttribute
     })
-
-    public position = signal<BorderGroupPosition | null>(null)
-    public isHover = signal<boolean>(false)
+    public readonly withDividerBottom = input(false, {
+        transform: booleanAttribute
+    })
 
     public mouseEnter = output<void>()
     public mouseLeave = output<void>()
 
-    public onMouseEnter(): void {
-        if (this.disableHoverMode()) return
-        this.mouseEnter.emit()
+    public readonly isHover = signal<boolean>(false)
+    public readonly direction = signal<Direction>('horizontal')
+
+    protected onMouseEnter(): void {
+        if (!this.disableHoverMode()) {
+            this.mouseEnter.emit()
+        }
     }
-    public onMouseLeave(): void {
-        if (this.disableHoverMode()) return
-        this.mouseLeave.emit()
+
+    protected onMouseLeave(): void {
+        if (!this.disableHoverMode()) {
+            this.mouseLeave.emit()
+        }
     }
 }

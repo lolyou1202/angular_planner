@@ -1,30 +1,24 @@
 <button
     class="border-group-child"
-    [ngClass]="[position() || '']"
-    [class.disable-hover-mode]="disableHoverMode()"
-    [class.bordered-element-hover]="isHover()"
-    [class.only-icon]="!text()"
+    [class]="{
+        'border-group-child': true,
+        'disable-hover': disableHoverMode(),
+        'divider-bottom': withDividerBottom(),
+        'only-icon': icon() && !text() && direction() === 'horizontal',
+        'hover': isHover(),
+        'horizontal': direction() === 'horizontal',
+        'vertical': direction() === 'vertical'
+    }"
     (mouseenter)="onMouseEnter()"
     (mouseleave)="onMouseLeave()"
 >
-    <app-bordered-container
-        [isHover]="isHover()"
-        [withHoverMode]="!disableHoverMode()"
-        class="border-group-child__container"
-    >
-        <span class="border-group-child__content-container">
-            @if (icon()) {
-                <app-icon
-                    [name]="icon()!"
-                    class="border-group-child__icon"
-                ></app-icon>
-            }
-            @if (text()) {
-                <p class="border-group-child__text">
-                    {{ text() }}
-                </p>
-            }
-            <ng-content></ng-content>
-        </span>
-    </app-bordered-container>
+    @if (icon()) {
+        <app-icon [name]="icon()!" class="border-group-child__icon"></app-icon>
+    }
+    @if (text()) {
+        <p class="border-group-child__text">
+            {{ text() }}
+        </p>
+    }
+    <ng-content></ng-content>
 </button>
