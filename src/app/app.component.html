@@ -37,12 +37,6 @@
     withToggle
     [(isActive)]="bageState"
 />
-<app-badge
-    text="Лейбл"
-    colorScheme="red"
-    withToggle
-    [(isActive)]="bageState"
-/>
 <app-badge text="Лейбл" colorScheme="red" withToggle [(isActive)]="bageState" />
 <app-badge
     iconName="cross"
@@ -81,3 +75,7 @@
 
 Бэйдж с кастомным цветом
 <app-badge text="Лейбл" iconName="cross" colorScheme="custom" withToggle />
+
+@for (task of tasks(); track task.id) {
+    <app-task-card [task]="task" />
+}
