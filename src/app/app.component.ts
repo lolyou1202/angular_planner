@@ -80,7 +80,7 @@ export class AppComponent {
             menuRef.afterClosed.subscribe(() => console.log('Меню закрыто'))
         }
     }
-}
+
     protected bageState = signal(false)
     protected tasks = signal<Task[]>([
         {

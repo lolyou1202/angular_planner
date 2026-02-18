@@ -28,7 +28,7 @@ export class MenuService extends OverlayService<MenuConfig, MenuRef> {
             .withDefaultOffsetY(4)
 
         return {
-            hasBackdrop: config.hasBackdrop ?? false,
+            hasBackdrop: config.closeOnBackdropClick ?? config.closeOnClickOutside ?? false,
             backdropClass: 'cdk-overlay-transparent-backdrop',
             panelClass: this._buildClasses('app-menu-panel', config.panelClass),
             positionStrategy,
@@ -88,7 +88,7 @@ export class MenuService extends OverlayService<MenuConfig, MenuRef> {
             ...config,
             origin: originElement,
             push: true,
-            closeOnClickOutside: true,
+            closeOnBackdropClick: true,
             position: 'bottom',
             minWidth: '200px',
             scrollStrategyType: 'reposition',
