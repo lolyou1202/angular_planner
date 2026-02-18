@@ -5,7 +5,7 @@ import {
     OnInit
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { MODAL_DATA, MODAL_REF } from './modal.tokens'
+import { OVERLAY_DATA, OVERLAY_REF } from '../../../core/overlay/overlay.tokens'
 
 @Component({
     selector: 'app-test-base',
@@ -17,8 +17,8 @@ import { MODAL_DATA, MODAL_REF } from './modal.tokens'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TestBaseComponent implements OnInit {
-    public data = inject(MODAL_DATA, { optional: true })
-    private _modalRef = inject(MODAL_REF)
+    public data = inject(OVERLAY_DATA, { optional: true })
+    private _modalRef = inject(OVERLAY_REF)
 
     public ngOnInit(): void {
         console.log(this.data)
