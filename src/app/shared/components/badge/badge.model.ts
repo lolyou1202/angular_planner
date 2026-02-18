@@ -1,0 +1,10 @@
+export type ColorScheme =
+    | 'orange'
+    | 'green'
+    | 'yellow'
+    | 'blue'
+    | 'red'
+    | 'gray'
+    | 'purple'
+    | 'done'
+    | 'custom'
