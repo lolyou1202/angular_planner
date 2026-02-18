@@ -1,10 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    booleanAttribute,
-    input,
-    model
-} from '@angular/core'
+import { Component, booleanAttribute, input, model } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { IconComponent } from '../icon/icon.component'
 import { IconNames } from '../icon/icon-names.type'
@@ -15,8 +9,7 @@ import { ColorScheme } from './badge.model'
     standalone: true,
     imports: [CommonModule, IconComponent],
     templateUrl: './badge.component.html',
-    styleUrl: './badge.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrl: './badge.component.scss'
 })
 export class BadgeComponent {
     public readonly text = input<string>()
