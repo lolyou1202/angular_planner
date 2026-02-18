@@ -1,3 +1,7 @@
+import { Component, signal } from '@angular/core'
+import { BorderGroupComponent } from './shared/components/border-group/border-group.component'
+import { BorderGroupChildComponent } from './shared/components/border-group-child/border-group-child.component'
+import { BadgeComponent } from "./shared/components/badge/badge.component";
 import { Component, inject } from '@angular/core'
 import { BorderGroupComponent } from './shared/components/border-group/border-group.component'
 import { BorderGroupChildComponent } from './shared/components/border-group-child/border-group-child.component'
@@ -9,9 +13,15 @@ import { MenuService } from './core/menu/menu.service'
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [BorderGroupComponent, BorderGroupChildComponent]
+    imports: [BorderGroupComponent, BorderGroupChildComponent, BadgeComponent]
 })
 export class AppComponent {
+	protected bageState = signal(false)
+
+	protected toggle(): void {
+		this.bageState.set(!this.bageState())
+	}
+}
     private _modalService = inject(ModalService)
     private _menuService = inject(MenuService)
 
