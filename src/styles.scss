@@ -53,6 +53,7 @@
     --color-circle-indicator-low: var(--token-red-3);
 
     --border-width: 1px;
+    --border-style: var(--border-width) solid;
 }
 
 *,
@@ -74,4 +75,8 @@ body {
     height: 20px;
 
     background: var(--border-color);
+}
+
+.app-modal-backdrop {
+    background: rgba(63, 63, 70, 0.2);
 }
