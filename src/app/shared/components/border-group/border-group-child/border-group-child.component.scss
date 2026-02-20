@@ -17,6 +17,7 @@
 
         background: none;
     }
+
     &:has(.border-group-child.horizontal) {
         &:not(:first-child):after {
             top: 0;
@@ -27,6 +28,7 @@
             border-left: var(--border-width) solid var(--color-border);
         }
     }
+	
     &:has(.border-group-child.vertical) {
         &:not(:first-child):after {
             left: 0;

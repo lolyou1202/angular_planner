@@ -10,7 +10,7 @@ import {
     ChangeDetectionStrategy
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { BorderGroupChildComponent } from '../border-group-child/border-group-child.component'
+import { BorderGroupChildComponent } from './border-group-child/border-group-child.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Direction, HoverMode } from './border-group.model'
 

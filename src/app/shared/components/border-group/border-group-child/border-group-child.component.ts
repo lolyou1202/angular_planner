@@ -7,9 +7,9 @@ import {
     signal
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { IconComponent } from '../icon/icon.component'
-import { IconNames } from '../icon/icon-names.type'
-import { Direction } from '../border-group/border-group.model'
+import { IconComponent } from '../../icon/icon.component'
+import { IconNames } from '../../icon/icon-names.type'
+import { Direction } from '../border-group.model'
 
 @Component({
     selector: 'app-border-group-child',
