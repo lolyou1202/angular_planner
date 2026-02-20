@@ -1,6 +1,6 @@
 import { Component, signal, inject } from '@angular/core'
 import { BorderGroupComponent } from './shared/components/border-group/border-group.component'
-import { BorderGroupChildComponent } from './shared/components/border-group-child/border-group-child.component'
+import { BorderGroupChildComponent } from './shared/components/border-group/border-group-child/border-group-child.component'
 import { TestBaseComponent } from './shared/components/modal-forms/test-base-modal.component'
 import { ModalService } from './core/modal/modal.service'
 import { MenuService } from './core/menu/menu.service'
