@@ -10,6 +10,8 @@
 
     --shadow-default: 0 0 0 var(--border-width) var(--color-shadow);
     --shadow-hover: 0 0 0 var(--border-width) var(--color-shadow-hover);
+
+	height: var(--height-container);
 }
 
 .bordered-container {
@@ -35,6 +37,8 @@
 
         box-shadow: var(--shadow-default);
         border-radius: var(--border-radius-container);
+
+		pointer-events: none;
     }
     &::after {
 		z-index: 11;

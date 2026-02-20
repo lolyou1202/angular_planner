@@ -48,13 +48,14 @@
     --color-dark-hover: var(--token-black);
 
     --color-done: var(--token-green-3);
-    --color-done-dark: var(--token-green-4);
+    --color-done-hover: var(--token-green-4);
 
     --color-circle-indicator-high: var(--token-green-3);
     --color-circle-indicator-medium: var(--token-orange-3);
     --color-circle-indicator-low: var(--token-red-3);
 
     --border-width: 1px;
+    --border-style: var(--border-width) solid;
 }
 
 *,
@@ -69,4 +70,8 @@ body {
     margin: 40px;
 
     font-family: 'Lato', serif;
+}
+
+.app-modal-backdrop {
+    background: rgba(63, 63, 70, 0.2);
 }
