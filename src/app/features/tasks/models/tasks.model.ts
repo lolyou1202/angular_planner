@@ -1,3 +1,10 @@
+export type Group = {
+    id: string
+    name: string
+    color: string
+    tasks: Task[]
+}
+
 export type Task = {
     id: string
     completed: boolean
