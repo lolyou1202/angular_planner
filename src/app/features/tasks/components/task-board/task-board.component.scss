@@ -1,0 +1,9 @@
+.task-board {
+    display: flex;
+    flex-direction: column;
+
+    &__board {
+        display: flex;
+        gap: 16px;
+    }
+}
