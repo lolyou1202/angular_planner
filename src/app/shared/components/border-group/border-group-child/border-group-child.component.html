@@ -1,0 +1,24 @@
+<button
+    class="border-group-child"
+    [class]="{
+        'border-group-child': true,
+        'disable-hover': disableHoverMode(),
+        'divider-bottom': withDividerBottom(),
+        'only-icon': icon() && !text() && direction() === 'horizontal',
+        'hover': isHover(),
+        'horizontal': direction() === 'horizontal',
+        'vertical': direction() === 'vertical'
+    }"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
+>
+    @if (icon()) {
+        <app-icon [name]="icon()!" class="border-group-child__icon"></app-icon>
+    }
+    @if (text()) {
+        <p class="border-group-child__text">
+            {{ text() }}
+        </p>
+    }
+    <ng-content></ng-content>
+</button>

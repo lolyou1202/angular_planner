@@ -10,9 +10,9 @@ import {
     ChangeDetectionStrategy
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { BorderGroupChildComponent } from '../border-group-child/border-group-child.component'
+import { BorderGroupChildComponent } from './border-group-child/border-group-child.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { HoverMode } from './border-group-hover-mode.type'
+import { Direction, HoverMode } from './border-group.model'
 
 @Component({
     selector: 'app-border-group',
@@ -27,6 +27,7 @@ export class BorderGroupComponent implements AfterContentInit {
     private _children!: QueryList<BorderGroupChildComponent>
 
     public readonly hoverMode = input<HoverMode>('individual-hover')
+    public readonly direction = input<Direction>('horizontal')
 
     private _destroyRef = inject(DestroyRef)
     private _subscriptions: {
@@ -47,26 +48,10 @@ export class BorderGroupComponent implements AfterContentInit {
         this._clearAllSubscriptions()
 
         this._children.forEach((child, index) => {
-            this._updateChildPosition(child, index, this._children.length)
+            child.direction.set(this.direction())
 
             this._setupMouseListeners(child, index)
         })
-    }
-
-    private _updateChildPosition(
-        child: BorderGroupChildComponent,
-        index: number,
-        total: number
-    ): void {
-        if (total === 1) {
-            child.position.set('single')
-        } else if (index === 0) {
-            child.position.set('first')
-        } else if (index === total - 1) {
-            child.position.set('last')
-        } else {
-            child.position.set('middle')
-        }
     }
 
     private _setupMouseListeners(
