@@ -1,8 +1,25 @@
 :host {
+	--height: 32px;
+
     display: inline-flex;
 }
 
 .border-group {
     display: flex;
     gap: 0;
+
+    overflow: hidden;
+
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 6px;
+
+    &.vertical {
+        flex-direction: column;
+    }
+
+    &.horizontal {
+        flex-direction: row;
+
+		height: var(--height);
+    }
 }
