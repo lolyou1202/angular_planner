@@ -90,6 +90,4 @@
 Бэйдж с кастомным цветом
 <app-badge text="Лейбл" iconName="cross" colorScheme="custom" withToggle />
 
-@for (task of tasks(); track task.id) {
-    <app-task-card [task]="task" />
-}
+<app-task-board />

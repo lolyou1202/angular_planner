@@ -1,0 +1,8 @@
+<div class="task-board">
+    <div class="task-board__filter-row"></div>
+    <div class="task-board__board">
+        @for (group of groups; track group.id) {
+            <app-task-group [group]="group"></app-task-group>
+        }
+    </div>
+</div>
