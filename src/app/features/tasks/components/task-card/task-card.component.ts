@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { Task } from '../models/tasks.model'
-import { DURATION_MAP, PRIORITY_MAP } from '../constants/map.constants'
-import { getTaskMetaData } from '../utils/task-display.utils'
-import { BadgeComponent } from '../../../shared/components/badge/badge.component'
-import { IconComponent } from '../../../shared/components/icon/icon.component'
-import { CheckboxComponent } from '../../../shared/components/checkbox/checkbox.component'
-import { ProgressRingComponent } from '../../../shared/components/progress-ring/progress-ring.component'
+import { Task } from '../../models/tasks.model'
+import { DURATION_MAP, PRIORITY_MAP } from '../../constants/map.constants'
+import { getTaskMetaData } from '../../utils/task-display.utils'
+import { BadgeComponent } from '../../../../shared/components/badge/badge.component'
+import { IconComponent } from '../../../../shared/components/icon/icon.component'
+import { CheckboxComponent } from '../../../../shared/components/checkbox/checkbox.component'
+import { ProgressRingComponent } from '../../../../shared/components/progress-ring/progress-ring.component'
 
 @Component({
     selector: 'app-task-card',
