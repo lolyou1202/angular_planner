@@ -15,12 +15,16 @@
             </p>
         </div>
         <div class="task-group__buttons">
-            <app-button variant="primary" icon="plus"></app-button>
+            <app-button
+                variant="primary"
+                iconName="plus"
+                (clicked)="onClickAddTask()"
+            />
             <app-button
                 variant="white-bordered"
-                icon="more"
+                iconName="more"
                 (clicked)="onClickMore()"
-            ></app-button>
+            />
         </div>
     </div>
     <div class="task-group__list">
@@ -28,7 +32,7 @@
             <app-task-card
                 [task]="task"
                 (taskClicked)="onClickTask({ taskId: task.id })"
-            ></app-task-card>
+            />
         }
     </div>
 </div>

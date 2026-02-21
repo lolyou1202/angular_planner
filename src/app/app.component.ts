@@ -1,28 +1,26 @@
-import { Component, signal, inject } from '@angular/core'
+import { Component, inject } from '@angular/core'
 import { BorderGroupComponent } from './shared/components/border-group/border-group.component'
 import { BorderGroupChildComponent } from './shared/components/border-group/border-group-child/border-group-child.component'
 import { TestBaseComponent } from './shared/components/modal-forms/test-base-modal.component'
 import { ModalService } from './core/modal/modal.service'
 import { MenuService } from './core/menu/menu.service'
-import { BadgeComponent } from './shared/components/badge/badge.component'
-import { TaskBoardComponent } from "./features/tasks/components/task-board/task-board.component";
+import { TaskBoardComponent } from './features/tasks/components/task-board/task-board.component'
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
     imports: [
-    BorderGroupComponent,
-    BorderGroupChildComponent,
-    BadgeComponent,
-    TaskBoardComponent
-]
+        BorderGroupComponent,
+        BorderGroupChildComponent,
+        TaskBoardComponent
+    ]
 })
 export class AppComponent {
     private _modalService = inject(ModalService)
     private _menuService = inject(MenuService)
 
-    public onClickModal(): void {
+    protected openModal(): void {
         const modalRef = this._modalService.open(TestBaseComponent, {
             title: 'asd',
             data: {
@@ -53,7 +51,7 @@ export class AppComponent {
         })
     }
 
-    public openMenu(event: MouseEvent): void {
+    protected openMenu(event: MouseEvent): void {
         const origin = event.currentTarget as HTMLElement
         if (origin) {
             const menuRef = this._menuService.openMenu(origin, {
@@ -78,11 +76,5 @@ export class AppComponent {
 
             menuRef.afterClosed.subscribe(() => console.log('Меню закрыто'))
         }
-    }
-
-    protected bageState = signal(false)
-
-    protected toggle(): void {
-        this.bageState.set(!this.bageState())
     }
 }
