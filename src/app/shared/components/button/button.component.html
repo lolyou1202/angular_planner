@@ -1,35 +1,17 @@
 <button
     type="button"
     class="button"
-    [ngClass]="[size()]"
-    [class.primary]="variant() === 'primary'"
-    [class.white-bordered]="variant() === 'white-bordered'"
-    [class.transparent]="variant() === 'transparent'"
-    [class.disabled]="disabled()"
+    [ngClass]="[variant()]"
     [disabled]="disabled()"
     (click)="onClick()"
 >
-    @if (variant() === 'white-bordered') {
-        <app-bordered-container withHoverMode class="button__bordered-container">
-            <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
-        </app-bordered-container>
+    @if (iconName() && iconPosition() === 'left') {
+        <app-icon [name]="iconName()!" class="button__icon" />
     }
-
-    @if (variant() !== 'white-bordered') {
-        <ng-container [ngTemplateOutlet]="buttonContent"></ng-container>
+    @if (text()) {
+        <span class="button__text">{{ text() }}</span>
+    }
+    @if (iconName() && iconPosition() === 'right') {
+        <app-icon [name]="iconName()!" class="button__icon" />
     }
 </button>
-
-<ng-template #buttonContent>
-    <span class="button__container">
-        @if (icon() && iconPosition() === 'left') {
-            <app-icon [name]="icon()!" class="button__icon" />
-        }
-        @if (text()) {
-            <span class="button__text">{{ text() }}</span>
-        }
-        @if (icon() && iconPosition() === 'right') {
-            <app-icon [name]="icon()!" class="button__icon" />
-        }
-    </span>
-</ng-template>
