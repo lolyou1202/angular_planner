@@ -1,6 +1,8 @@
-import { Component } from '@angular/core'
+import { Component, DestroyRef, inject, signal } from '@angular/core'
 import { TaskGroupComponent } from '../task-group/task-group.component'
-import { Group } from '../../models/tasks.model'
+import { Group, Task } from '../../models/tasks.model'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { DragDropService } from '../../../../shared/services/drag-drop.service'
 
 @Component({
     selector: 'app-task-board',
@@ -9,7 +11,7 @@ import { Group } from '../../models/tasks.model'
     imports: [TaskGroupComponent]
 })
 export class TaskBoardComponent {
-    protected readonly groups: Group[] = [
+    protected readonly groups = signal<Group[]>([
         {
             id: 'group-01',
             name: 'Домашнее',
@@ -42,7 +44,7 @@ export class TaskBoardComponent {
                     //countAttachedFiles: 6,
                     //countAttachedLinks: 2,
                     //duration: 'quick',
-                    priority: 'neutral',
+                    priority: 'neutral'
                     //targetDate: '2024-11-04T00:00:00Z'
                 },
                 {
@@ -57,7 +59,7 @@ export class TaskBoardComponent {
                     //countAttachedFiles: 6,
                     //countAttachedLinks: 2,
                     //duration: 'quick',
-                    priority: 'neutral',
+                    priority: 'neutral'
                     //targetDate: '2024-11-04T00:00:00Z'
                 }
             ]
@@ -73,13 +75,13 @@ export class TaskBoardComponent {
                     archived: false,
                     title: 'фывфф',
                     //description:
-                        //'Протереть пф as f asdf sad f sdfsdfsd fsdf sdf sd fsdqwwwFWNKF F SDF SDAB Sv',
+                    //'Протереть пф as f asdf sad f sdfsdfsd fsdf sdf sd fsdqwwwFWNKF F SDF SDAB Sv',
                     completedSubtasks: 2,
                     totalSubtasks: 10,
                     //countAttachedFiles: 6,
                     countAttachedLinks: 2,
                     duration: 'long',
-                    priority: 'high',
+                    priority: 'high'
                     //targetDate: '2024-11-04T00:00:00Z'
                 },
                 {
@@ -113,5 +115,50 @@ export class TaskBoardComponent {
                 }
             ]
         }
-    ]
+    ])
+
+    private dragDropService = inject(DragDropService<Task>)
+    private destroyRef = inject(DestroyRef)
+
+    protected ngOnInit(): void {
+        this.dragDropService.dropComplete$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(({ data: task, sourceId, targetId, targetIndex }) => {
+                if (task && sourceId && targetId && targetIndex !== -1) {
+                    this.moveTask(task, sourceId, targetId, targetIndex)
+                }
+            })
+    }
+
+    private moveTask(
+        task: Task,
+        sourceGroupId: string,
+        targetGroupId: string,
+        targetIndex: number
+    ): void {
+        this.groups.update(groups => {
+            const newGroups = groups.map(g => ({
+                ...g,
+                tasks: [...g.tasks]
+            }))
+
+            const sourceGroup = newGroups.find(g => g.id === sourceGroupId)
+            const targetGroup = newGroups.find(g => g.id === targetGroupId)
+            if (!sourceGroup || !targetGroup) return groups
+
+            const taskIndex = sourceGroup.tasks.findIndex(t => t.id === task.id)
+            if (taskIndex === -1) return groups
+
+            const [removedTask] = sourceGroup.tasks.splice(taskIndex, 1)
+            
+            const adjustedTargetIndex = 
+                sourceGroupId === targetGroupId && taskIndex < targetIndex
+                    ? targetIndex - 1
+                    : targetIndex
+            
+            targetGroup.tasks.splice(adjustedTargetIndex, 0, removedTask)
+
+            return newGroups
+        })
+    }
 }

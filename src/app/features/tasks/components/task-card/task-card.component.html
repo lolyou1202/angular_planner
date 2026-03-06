@@ -1,6 +1,11 @@
 <div
     class="task-card"
     [class.completed]="task().completed"
+    [class.dragging]="isDragging()"
+	appDraggable
+    [appDraggableData]="task()"
+    [appDraggableZone]="groupId()"
+    appDraggableHandle=".task-card__drag"
     (click)="onClickTask()"
 >
     <div class="task-card__main">

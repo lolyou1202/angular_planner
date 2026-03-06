@@ -27,12 +27,27 @@
             />
         </div>
     </div>
-    <div class="task-group__list">
+    <div class="task-group__list" appDropZone [appDropZoneId]="groupId()">
+        <div
+            appDropIndicator
+            [appDropIndicatorIndex]="0"
+            [appDropIndicatorZone]="groupId()"
+            class="task-group__drop-indicator"
+            [class.visible]="showIndicator()"
+        ></div>
         @for (task of group().tasks; track task.id) {
             <app-task-card
                 [task]="task"
+                [groupId]="groupId()"
                 (taskClicked)="onClickTask({ taskId: task.id })"
             />
+            <div
+                appDropIndicator
+                [appDropIndicatorIndex]="$index + 1"
+                [appDropIndicatorZone]="groupId()"
+                class="task-group__drop-indicator"
+                [class.visible]="showIndicator()"
+            ></div>
         }
     </div>
 </div>
