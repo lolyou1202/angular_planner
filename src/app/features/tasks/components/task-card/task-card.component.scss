@@ -1,8 +1,12 @@
 .task-card {
+    --ghost-left: 0;
+    --ghost-top: 0;
+    --ghost-width: auto;
+
     display: flex;
     flex-direction: column;
 
-	max-width: 360px;
+    max-width: 360px;
 
     background: var(--color-white);
     border-radius: 8px;
@@ -33,6 +37,42 @@
                 border-color: var(--color-done-hover);
             }
         }
+    }
+
+    &.dragging {
+        position: relative;
+
+        border-style: dashed;
+        pointer-events: none;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+
+            background: var(--color-white);
+            border-radius: 8px;
+        }
+    }
+
+    &.ghost {
+        position: fixed;
+        left: var(--ghost-left);
+        top: var(--ghost-top);
+        z-index: 9999;
+        transform: rotate(3deg);
+        scale: 0.9;
+        opacity: 0.5;
+
+        margin: 0;
+
+        width: var(--ghost-width);
+
+        pointer-events: none;
     }
 
     &__main {
