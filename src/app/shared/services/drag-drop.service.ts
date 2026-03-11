@@ -1,75 +1,35 @@
-import { computed, Injectable, signal } from '@angular/core'
+import { computed, Injectable, OnDestroy, signal } from '@angular/core'
 import { Subject } from 'rxjs'
-
-/**
- * Результат перетаскивания
- */
-export interface DropResult<T = unknown> {
-    data: T
-    sourceId: string
-    targetId: string
-    targetIndex: number
-}
-
-/**
- * Событие наведения на индикатор
- */
-export interface IndicatorHoverEvent {
-    zoneId: string
-    index: number
-}
-
-/**
- * Интерфейс для drop-зоны
- */
-export interface DropZone {
-    id: string
-    element: HTMLElement
-    /** Поток событий наведения на индикаторы */
-    indicatorHover$: Subject<IndicatorHoverEvent | null>
-}
+import { DragState, DropResult } from '../models/drag-drop.types'
 
 @Injectable({ providedIn: 'root' })
-export class DragDropService<T = unknown> {
-    private dragState = signal<DragState<T> | null>(null)
-    private targetZoneIdInternal = signal<string | null>(null)
-    private targetIndexInternal = signal<number>(-1)
-    private isDraggingInternal = signal(false)
+export class DragDropService<T = unknown> implements OnDestroy {
+    private _dragState = signal<DragState<T> | null>(null)
+    private _targetZoneId = signal<string | null>(null)
+    private _targetIndex = signal<number>(-1)
+    private _isDragging = signal(false)
+    private _dropComplete$ = new Subject<DropResult<T>>()
 
-    private dropZones = new Set<DropZone>()
-
-    private dropCompleteSubject = new Subject<DropResult<T>>()
-    public readonly dropComplete$ = this.dropCompleteSubject.asObservable()
-
-    // Computed signals для публичного API
-    public readonly isDragging = computed(() => this.isDraggingInternal())
-    public readonly draggedItem = computed(() => this.dragState()?.data ?? null)
-    public readonly sourceId = computed(() => this.dragState()?.sourceId ?? null)
-    public readonly draggedElement = computed(
-        () => this.dragState()?.element ?? null
+    public readonly dropComplete$ = this._dropComplete$.asObservable()
+    public readonly isDragging = computed(() => this._isDragging())
+    public readonly draggedData = computed(
+        () => this._dragState()?.data ?? null
     )
-    public readonly dragOffsetX = computed(() => this.dragState()?.offsetX ?? 0)
-    public readonly dragOffsetY = computed(() => this.dragState()?.offsetY ?? 0)
-    public readonly targetZoneId = computed(() => this.targetZoneIdInternal())
-    public readonly targetIndex = computed(() => this.targetIndexInternal())
+    public readonly sourceZoneId = computed(
+        () => this._dragState()?.sourceZoneId ?? null
+    )
+    public readonly draggedElement = computed(
+        () => this._dragState()?.element ?? null
+    )
+    public readonly dragOffsetX = computed(
+        () => this._dragState()?.offsetX ?? 0
+    )
+    public readonly dragOffsetY = computed(
+        () => this._dragState()?.offsetY ?? 0
+    )
+    public readonly targetZoneId = computed(() => this._targetZoneId())
+    public readonly targetIndex = computed(() => this._targetIndex())
 
-    /**
-     * Регистрация drop-зоны
-     */
-    public registerDropZone(zone: DropZone): void {
-        this.dropZones.add(zone)
-    }
-
-    /**
-     * Удаление drop-зоны
-     */
-    public unregisterDropZone(zone: DropZone): void {
-        this.dropZones.delete(zone)
-    }
-
-    /**
-     * Начало перетаскивания
-     */
     public startDrag(
         data: T,
         sourceZoneId: string,
@@ -77,36 +37,30 @@ export class DragDropService<T = unknown> {
         offsetX: number,
         offsetY: number
     ): void {
-        this.dragState.set({
+        this._dragState.set({
             data,
-            sourceId: sourceZoneId,
+            sourceZoneId,
             element,
             offsetX,
             offsetY
         })
-        this.targetZoneIdInternal.set(sourceZoneId)
-        this.targetIndexInternal.set(0)
-        this.isDraggingInternal.set(true)
+        this._targetZoneId.set(sourceZoneId)
+        this._targetIndex.set(-1)
+        this._isDragging.set(true)
     }
 
-    /**
-     * Обновление целевой зоны и индекса
-     */
     public updateTarget(zoneId: string | null, index: number): void {
-        if (!this.isDraggingInternal()) return
-        this.targetZoneIdInternal.set(zoneId)
-        this.targetIndexInternal.set(index)
+        if (!this._isDragging()) return
+
+        this._targetZoneId.set(zoneId)
+        this._targetIndex.set(index)
     }
 
-    /**
-     * Завершение перетаскивания с подтверждением
-     */
     public endDrag(): void {
-        const dragState = this.dragState()
-        const targetZoneId = this.targetZoneIdInternal()
-        const targetIndex = this.targetIndexInternal()
+        const dragState = this._dragState()
+        const targetZoneId = this._targetZoneId()
+        const targetIndex = this._targetIndex()
 
-        // Отмена если зона не найдена или индекс невалидный
         if (!dragState || targetZoneId === null || targetIndex === -1) {
             this.cancelDrag()
             return
@@ -114,34 +68,27 @@ export class DragDropService<T = unknown> {
 
         const result: DropResult<T> = {
             data: dragState.data,
-            sourceId: dragState.sourceId,
-            targetId: targetZoneId,
+            sourceZoneId: dragState.sourceZoneId,
+            targetZoneId,
             targetIndex
         }
 
-        this.resetState()
-        this.dropCompleteSubject.next(result)
+        this._resetState()
+        this._dropComplete$.next(result)
     }
 
-    /**
-     * Отмена перетаскивания (без применения изменений)
-     */
     public cancelDrag(): void {
-        this.resetState()
+        this._resetState()
     }
 
-    private resetState(): void {
-        this.dragState.set(null)
-        this.targetZoneIdInternal.set(null)
-        this.targetIndexInternal.set(-1)
-        this.isDraggingInternal.set(false)
+    private _resetState(): void {
+        this._dragState.set(null)
+        this._targetZoneId.set(null)
+        this._targetIndex.set(-1)
+        this._isDragging.set(false)
     }
-}
 
-interface DragState<T = unknown> {
-    data: T
-    sourceId: string
-    element: HTMLElement
-    offsetX: number
-    offsetY: number
+    public ngOnDestroy(): void {
+        this._dropComplete$.complete()
+    }
 }

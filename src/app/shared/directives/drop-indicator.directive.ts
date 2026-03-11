@@ -1,40 +1,35 @@
-import { Directive, inject, input, HostListener } from '@angular/core'
+import { Directive, inject, input, ElementRef, DestroyRef } from '@angular/core'
 import { DragDropService } from '../services/drag-drop.service'
+import { filter, fromEvent } from 'rxjs'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
-/**
- * Директива drop-индикатора
- *
- * Обновляет целевую зону при наведении курсора
- */
 @Directive({
     selector: '[appDropIndicator]',
     standalone: true
 })
 export class DropIndicatorDirective {
+    private readonly element = inject(ElementRef).nativeElement as HTMLElement
+    private readonly destroyRef = inject(DestroyRef)
     private readonly dragDropService = inject(DragDropService)
 
-    /** Индекс вставки */
     public readonly appDropIndicatorIndex = input.required<number>()
-
-    /** ID зоны */
     public readonly appDropIndicatorZone = input.required<string>()
 
-    @HostListener('mouseenter')
-    protected onMouseEnter(): void {
-        if (this.dragDropService.isDragging()) {
-            this.dragDropService.updateTarget(
-                this.appDropIndicatorZone(),
-                this.appDropIndicatorIndex()
+    private _watchDragOver(): void {
+        fromEvent<MouseEvent>(this.element, 'mouseover')
+            .pipe(
+                filter(() => this.dragDropService.isDragging()),
+                takeUntilDestroyed(this.destroyRef)
             )
-        }
+            .subscribe(() => {
+                this.dragDropService.updateTarget(
+                    this.appDropIndicatorZone(),
+                    this.appDropIndicatorIndex()
+                )
+            })
     }
 
-    @HostListener('mouseleave')
-    protected onMouseLeave(): void {
-        if (this.dragDropService.isDragging()) {
-            this.dragDropService.updateTarget(null, -1)
-        }
+    public ngOnInit(): void {
+        this._watchDragOver()
     }
 }
-
-
