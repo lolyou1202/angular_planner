@@ -1,11 +1,10 @@
 .task-group {
     display: flex;
     flex-direction: column;
-    gap: 16px;
 
-    padding: 16px;
+    padding: 16px 16px 0 16px;
 
-    width: 352px;
+    width: 440px;
 
     background: var(--color-background);
     border: var(--border-width) solid var(--color-border);
@@ -14,6 +13,7 @@
     &__header {
         display: flex;
         justify-content: space-between;
+		gap: 8px;
     }
 
     &__label {
@@ -37,8 +37,16 @@
     }
 
     &__name {
+		display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+		width: fit-content;
+
         font-weight: 700;
-        font-size: 24px;
+        font-size: 20px;
         line-height: 32px;
         color: var(--color-dark);
     }
@@ -47,8 +55,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+		flex-shrink: 0;
 
-		margin-bottom: -4px;
+        margin-bottom: -4px;
 
         width: 24px;
         height: 24px;
@@ -71,6 +80,41 @@
     &__list {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+    }
+
+    &__drop-indicator {
+        position: relative;
+
+        width: 100%;
+        height: 16px;
+
+        opacity: 0;
+
+        transition: opacity 0.2s ease;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: calc(100% - 48px);
+            height: 2px;
+
+            background: var(--color-border);
+            border-radius: 2px;
+
+            transition: background-color 0.2s ease;
+        }
+
+        &.visible {
+            opacity: 1;
+            cursor: pointer;
+
+            &:hover::after {
+                background: var(--color-border-hover);
+            }
+        }
     }
 }
