@@ -32,23 +32,21 @@ import { DragDropService } from '../../../../shared/services/drag-drop.service'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskCardComponent {
+    private readonly dragDropService = inject(DragDropService<Task>)
+
     public readonly task = input.required<Task>()
-    public readonly groupId = input.required<string>() // ID группы для drag&drop
+    public readonly groupId = input.required<string>()
 
     public readonly taskClicked = output()
-
-    private readonly dragDropService = inject(DragDropService<Task>)
 
     protected readonly isDragging = computed(
         () =>
             this.dragDropService.isDragging() &&
-            this.dragDropService.draggedItem()?.id === this.task().id
+            this.dragDropService.draggedData()?.id === this.task().id
     )
-
     protected readonly priorityBadge = computed(
         () => PRIORITY_MAP[this.task().priority]
     )
-
     protected readonly durationBadge = computed(() => {
         const duration = this.task().duration
 
@@ -58,7 +56,6 @@ export class TaskCardComponent {
             return null
         }
     })
-
     protected readonly metaDataItems = computed(() =>
         getTaskMetaData(this.task())
     )
